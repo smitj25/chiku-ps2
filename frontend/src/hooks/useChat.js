@@ -6,7 +6,7 @@ export function useChat() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const sendMessage = useCallback(async (text, personaId, compareMode = false) => {
+    const sendMessage = useCallback(async (text, plugId, compareMode = false) => {
         setError(null);
 
         // Add user message
@@ -15,7 +15,7 @@ export function useChat() {
         setLoading(true);
 
         try {
-            const data = await queryPipeline(text, personaId, compareMode);
+            const data = await queryPipeline(text, plugId, compareMode);
 
             // Determine if comparison mode
             if (data.vanilla_response !== undefined) {

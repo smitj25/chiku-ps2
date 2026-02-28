@@ -2,30 +2,35 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
+from core.plug_registry import plug_registry
 
-from config import CORS_ORIGINS, HOST, PORT
+from config import HOST, PORT
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Initialize services on startup."""
-    from services.namespace_manager import namespace_manager
-    namespace_manager.load()
-    print("✅ SME-Plug services initialized")
+    # Load plugs on startup
+    print("Loading SME-Plug configurations...")
+    plug_registry.load_plugs()
+    print(f"Loaded {len(plug_registry.list_plugs())} plugs.")
+    
     yield
-    print("🛑 SME-Plug shutting down")
+    
+    # Cleanup on shutdown
+    print("Shutting down...")
 
 
 app = FastAPI(
-    title="SME-Plug",
-    description="Enterprise LLM Orchestration Harness — Deterministic, Auditable, Safe.",
-    version="0.1.0",
+    title="SME-Plug Enterprise Middleware",
+    description="Stateless context engine and governance layer for LLM agents",
+    version="1.0.0",
     lifespan=lifespan,
 )
 
+# Configure CORS for all origins
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=CORS_ORIGINS,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -33,14 +38,14 @@ app.add_middleware(
 
 
 @app.get("/health")
-async def health():
-    return {"status": "ok", "service": "sme-plug", "version": "0.1.0"}
+async def health_check():
+    return {"status": "ok", "plugs_loaded": len(plug_registry.list_plugs())}
 
 
-# -- Register routers --
-from routers import query, personas, audit
+# Include API routers
+from routers import query, plugs, audit
 app.include_router(query.router)
-app.include_router(personas.router)
+app.include_router(plugs.router)
 app.include_router(audit.router)
 
 

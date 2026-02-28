@@ -1,62 +1,46 @@
 """
 Pipeline Orchestrator — The main query processing pipeline.
-Input → Guardrails → Retrieval → LLM → Citation Verification → Output Guardrails → Response
+Input → Guardrails → Retrieval → Context Engine → Base Agent → Citation Verification → Output Guardrails
 """
 from __future__ import annotations
 import time
 import uuid
 
-from models.schemas import (
+from schemas import (
     QueryRequest, QueryResponse, ComparisonResponse,
     PipelineStep, AuditEntry,
     GuardrailDecision,
 )
-from services.namespace_manager import namespace_manager
-from services.retriever import retriever_service
-from services.llm_service import llm_service
-from services.input_guard import input_guard
-from services.output_guard import output_guard
-from services.citation_verifier import citation_verifier
+from core.plug_registry import plug_registry
+from core.guardrails import guardrails
+from core.context_engine import context_engine
+from core.citation_verifier import citation_verifier
+from core.state_manager import state_manager
+from rag.retriever import retriever_service
+from agents.base_agent import base_agent
 
 
-# In-memory audit log
-_audit_log: list[AuditEntry] = []
-
-
-def get_audit_log() -> list[AuditEntry]:
-    return _audit_log
-
-
-def get_audit_entry(query_id: str) -> AuditEntry | None:
-    for entry in _audit_log:
-        if entry.query_id == query_id:
-            return entry
-    return None
-
-
-async def process_query(request: QueryRequest) -> QueryResponse | ComparisonResponse:
+async def process_query(request: QueryRequest, plug_id: str) -> QueryResponse | ComparisonResponse:
     """
-    Main pipeline: process a user query through the full SME-Plug pipeline.
+    Main middleware pipeline: process a user query through the full SME-Plug system.
     """
     start_time = time.time()
     query_id = str(uuid.uuid4())
     steps: list[PipelineStep] = []
 
-    # --- Resolve persona ---
-    if request.persona_id:
-        namespace_manager.switch_persona(request.persona_id)
-    persona = namespace_manager.get_active_persona()
-    if not persona:
+    # --- Step 0: Resolve Plug ---
+    plug = plug_registry.get_plug(plug_id)
+    if not plug:
         return QueryResponse(
             query_id=query_id,
-            response_text="Error: No active persona configured.",
-            persona_id="",
-            persona_name="Unknown",
+            response_text=f"Error: Unknown plug ID '{plug_id}'.",
+            plug_id=plug_id,
+            plug_name="Unknown",
         )
 
     # --- Step 1: Input Guardrails ---
     step_start = time.time()
-    input_result = input_guard.check(request.text, persona)
+    input_result = guardrails.check_input(request.text, plug)
     steps.append(PipelineStep(
         name="Input Guardrails",
         status=input_result.decision.value,
@@ -70,19 +54,19 @@ async def process_query(request: QueryRequest) -> QueryResponse | ComparisonResp
             response_text=f"🚫 Query blocked by input guardrails. Reason: {input_result.details}",
             input_guardrail=input_result,
             pipeline_steps=steps,
-            persona_id=persona.id,
-            persona_name=persona.name,
+            plug_id=plug.plug_id,
+            plug_name=plug.name,
             total_duration_ms=(time.time() - start_time) * 1000,
         )
 
     # Redact PII if flagged
     clean_query = request.text
     if input_result.decision == GuardrailDecision.FLAGGED:
-        clean_query = input_guard.redact_pii(request.text)
+        clean_query = guardrails.redact_pii(request.text)
 
     # --- Step 2: Retrieval ---
     step_start = time.time()
-    retrieved = retriever_service.retrieve(clean_query, persona.id, top_k=5)
+    retrieved = retriever_service.retrieve(clean_query, plug.plug_id, top_k=5)
     sections = [r.section for r in retrieved]
     steps.append(PipelineStep(
         name="Document Retrieval",
@@ -91,27 +75,30 @@ async def process_query(request: QueryRequest) -> QueryResponse | ComparisonResp
         details=f"Retrieved {len(sections)} sections from {len(set(s.filename for s in sections))} documents",
     ))
 
-    # --- Step 3: LLM Generation ---
+    # --- Step 3: Context Engine & LLM Generation ---
     step_start = time.time()
-    system_prompt = persona.system_prompt_override or (
-        f"You are {persona.name}. {persona.description}. "
-        "Cite all sources using [Source: filename, Page X, Section Y] format."
-    )
+    
+    # Context Engine builds the augmented prompt and system instructions based on the plug
+    augmented_prompt = context_engine.build_prompt(clean_query, sections, "")
+    system_prompt = context_engine.build_system_prompt(plug)
 
-    raw_response, llm_duration = llm_service.generate(
-        query=clean_query,
-        context_sections=sections,
+    # Base Agent executes the LLM call blindly
+    raw_response, llm_duration = base_agent.generate(
+        augmented_prompt=augmented_prompt,
         system_prompt=system_prompt,
     )
+    
     steps.append(PipelineStep(
         name="LLM Generation",
         status="passed",
         duration_ms=llm_duration,
-        details=f"Provider: {persona.id}, Response length: {len(raw_response)} chars",
+        details=f"Provider: Groq, Response length: {len(raw_response)} chars",
     ))
 
     # --- Step 4: Citation Verification ---
     step_start = time.time()
+    # verify() takes strings now, wait, no, the old verifier took sections.
+    # The citation verifier is the same. Let's see: citation_verifier.verify(raw_response, sections)
     citations = citation_verifier.verify(raw_response, sections)
     steps.append(PipelineStep(
         name="Citation Verification",
@@ -123,8 +110,8 @@ async def process_query(request: QueryRequest) -> QueryResponse | ComparisonResp
     # --- Step 5: Output Guardrails ---
     step_start = time.time()
     context_text = "\n\n".join(s.content for s in sections)
-    output_result, hallucination_score = output_guard.check(
-        raw_response, context_text, persona,
+    output_result, hallucination_score = guardrails.check_output(
+        raw_response, context_text, plug,
     )
     steps.append(PipelineStep(
         name="Output Guardrails",
@@ -144,16 +131,16 @@ async def process_query(request: QueryRequest) -> QueryResponse | ComparisonResp
         output_guardrail=output_result,
         pipeline_steps=steps,
         hallucination_score=hallucination_score,
-        persona_id=persona.id,
-        persona_name=persona.name,
+        plug_id=plug.plug_id,
+        plug_name=plug.name,
         total_duration_ms=total_duration,
     )
 
     # --- Audit log ---
     audit_entry = AuditEntry(
         query_id=query_id,
-        persona_id=persona.id,
-        persona_name=persona.name,
+        plug_id=plug.plug_id,
+        plug_name=plug.name,
         query_text=request.text,
         retrieved_sections=[
             {"filename": s.filename, "page": s.page, "title": s.title, "node_id": s.node_id}
@@ -167,18 +154,17 @@ async def process_query(request: QueryRequest) -> QueryResponse | ComparisonResp
         hallucination_score=hallucination_score,
         pipeline_steps=steps,
     )
-    _audit_log.append(audit_entry)
+    state_manager.add_audit_entry(audit_entry)
 
     # --- Comparison mode ---
     if request.compare_mode:
-        vanilla_start = time.time()
-        vanilla_response, vanilla_duration = llm_service.generate_vanilla(request.text)
+        vanilla_response, vanilla_duration = base_agent.generate_vanilla(request.text)
         return ComparisonResponse(
             query_id=query_id,
             vanilla_response=vanilla_response,
             vanilla_duration_ms=vanilla_duration,
             smeplug_response=smeplug_response,
-            persona_name=persona.name,
+            plug_name=plug.name,
         )
 
     return smeplug_response

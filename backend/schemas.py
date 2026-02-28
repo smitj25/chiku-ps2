@@ -27,10 +27,10 @@ class GuardrailDecision(str, Enum):
     FLAGGED = "flagged"
 
 
-# -- Namespace / Persona --
+# -- Plug Configuration --
 
-class PersonaConfig(BaseModel):
-    id: str = Field(default_factory=lambda: str(uuid.uuid4())[:8])
+class PlugConfig(BaseModel):
+    plug_id: str = Field(default_factory=lambda: str(uuid.uuid4())[:8])
     name: str
     description: str
     corpus_files: list[str] = Field(default_factory=list)
@@ -41,15 +41,10 @@ class PersonaConfig(BaseModel):
     blocked_terms: list[str] = Field(default_factory=list)
 
 
-class NamespaceSwitch(BaseModel):
-    persona_id: str
-
-
 # -- Query / Response --
 
 class QueryRequest(BaseModel):
     text: str
-    persona_id: Optional[str] = None
     compare_mode: bool = False  # Side-by-side comparison with vanilla LLM
 
 
@@ -87,8 +82,8 @@ class QueryResponse(BaseModel):
     output_guardrail: Optional[GuardrailResult] = None
     pipeline_steps: list[PipelineStep] = Field(default_factory=list)
     hallucination_score: float = 0.0
-    persona_id: str = ""
-    persona_name: str = ""
+    plug_id: str = ""
+    plug_name: str = ""
     total_duration_ms: float = 0.0
 
 
@@ -97,7 +92,7 @@ class ComparisonResponse(BaseModel):
     vanilla_response: str
     vanilla_duration_ms: float = 0.0
     smeplug_response: QueryResponse
-    persona_name: str = ""
+    plug_name: str = ""
 
 
 # -- Audit --
@@ -105,8 +100,8 @@ class ComparisonResponse(BaseModel):
 class AuditEntry(BaseModel):
     query_id: str
     timestamp: float = Field(default_factory=time.time)
-    persona_id: str
-    persona_name: str
+    plug_id: str
+    plug_name: str
     query_text: str
     retrieved_sections: list[dict] = Field(default_factory=list)
     raw_llm_response: str = ""

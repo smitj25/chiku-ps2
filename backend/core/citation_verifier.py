@@ -4,8 +4,8 @@ and verifies them against retrieved document sections.
 """
 from __future__ import annotations
 import re
-from models.schemas import Citation, CitationStatus
-from services.document_store import Section
+from schemas import Citation, CitationStatus
+from rag.vectorstore import Section
 
 
 class CitationVerifier:

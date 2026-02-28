@@ -1,20 +1,17 @@
 """
-LLM Service — Unified interface to Gemini and Groq.
-Constructs augmented prompts with retrieved context and citations format.
+Base Agent — Generic LLM wrapper ("The Car").
+It blindly executes the instructions provided by the SME-Plug Context Engine.
 """
-from __future__ import annotations
 import time
 from typing import Optional
-
 from config import (
     GEMINI_API_KEY, GROQ_API_KEY,
     LLM_PROVIDER, GEMINI_MODEL, GROQ_MODEL,
 )
-from services.document_store import Section
 
 
-class LLMService:
-    """Unified LLM interface supporting Gemini and Groq."""
+class BaseAgent:
+    """Generic wrapper invoking the selected LLM."""
 
     def __init__(self):
         self._gemini_model = None
@@ -31,22 +28,12 @@ class LLMService:
             from groq import Groq
             self._groq_client = Groq(api_key=GROQ_API_KEY)
 
-    def generate(
-        self,
-        query: str,
-        context_sections: list[Section],
-        system_prompt: str,
-        provider: Optional[str] = None,
-    ) -> tuple[str, float]:
+    def generate(self, augmented_prompt: str, system_prompt: str, provider: Optional[str] = None) -> tuple[str, float]:
         """
-        Generate a response using the specified LLM provider.
+        Execute the prompt against the LLM.
         Returns (response_text, duration_ms).
         """
         provider = provider or LLM_PROVIDER
-
-        # Build the augmented prompt
-        augmented_prompt = self._build_prompt(query, context_sections, system_prompt)
-
         start = time.time()
 
         if provider == "gemini":
@@ -60,18 +47,15 @@ class LLMService:
         return response, duration_ms
 
     def generate_vanilla(self, query: str) -> tuple[str, float]:
-        """
-        Generate a response WITHOUT RAG context or guardrails.
-        Used for the comparison mode to show how a vanilla LLM fails.
-        """
+        """Generate response WITHOUT RAG context/guardrails for comparison mode."""
         vanilla_prompt = (
             "Answer the following question. Be helpful and informative.\n\n"
             f"Question: {query}"
         )
 
         start = time.time()
-
         provider = LLM_PROVIDER
+
         if provider == "gemini":
             self._init_gemini()
             result = self._gemini_model.generate_content(vanilla_prompt)
@@ -90,35 +74,6 @@ class LLMService:
 
         duration_ms = (time.time() - start) * 1000
         return response, duration_ms
-
-    def _build_prompt(self, query: str, sections: list[Section], system_prompt: str) -> str:
-        """Build the augmented prompt with retrieved context."""
-        context_parts = []
-        for i, section in enumerate(sections, 1):
-            context_parts.append(
-                f"--- Document {i} ---\n"
-                f"File: {section.filename}\n"
-                f"Page: {section.page}\n"
-                f"Section: {section.title}\n"
-                f"Content:\n{section.content}\n"
-            )
-
-        context_block = "\n".join(context_parts) if context_parts else "No relevant documents found."
-
-        return (
-            f"RETRIEVED DOCUMENTS:\n"
-            f"{'='*60}\n"
-            f"{context_block}\n"
-            f"{'='*60}\n\n"
-            f"IMPORTANT INSTRUCTIONS:\n"
-            f"1. ONLY use information from the RETRIEVED DOCUMENTS above.\n"
-            f"2. For EVERY factual claim, include a citation: [Source: filename, Page X, Section Y]\n"
-            f"3. If the documents do not contain the answer, clearly state: "
-            f"\"The provided documents do not contain information about this topic.\"\n"
-            f"4. NEVER make up information not present in the documents.\n"
-            f"5. Be precise and specific — cite exact page numbers and sections.\n\n"
-            f"USER QUESTION: {query}"
-        )
 
     def _call_gemini(self, prompt: str, system_prompt: str) -> str:
         self._init_gemini()
@@ -140,5 +95,4 @@ class LLMService:
         return result.choices[0].message.content
 
 
-# Singleton
-llm_service = LLMService()
+base_agent = BaseAgent()

@@ -54,8 +54,15 @@ body {
 
 /* ===== Pulse Animation ===== */
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 5px var(--accent-glow); }
-  50% { box-shadow: 0 0 20px var(--accent-glow), 0 0 40px rgba(99, 102, 241, 0.1); }
+
+  0%,
+  100% {
+    box-shadow: 0 0 5px var(--accent-glow);
+  }
+
+  50% {
+    box-shadow: 0 0 20px var(--accent-glow), 0 0 40px rgba(99, 102, 241, 0.1);
+  }
 }
 
 .animate-pulse-glow {
@@ -101,8 +108,25 @@ body {
 
 /* ===== Pipeline Step Indicator ===== */
 @keyframes step-progress {
-  0% { width: 0%; }
-  100% { width: 100%; }
+  0% {
+    width: 0%;
+  }
+
+  100% {
+    width: 100%;
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(-15px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .pipeline-step {
@@ -112,6 +136,8 @@ body {
   background: var(--bg-card);
   border: 1px solid var(--border);
   transition: all 0.3s ease;
+  animation: slide-in-right 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
 }
 
 .pipeline-step.active {
@@ -127,13 +153,16 @@ body {
 ::-webkit-scrollbar {
   width: 6px;
 }
+
 ::-webkit-scrollbar-track {
   background: var(--bg-primary);
 }
+
 ::-webkit-scrollbar-thumb {
   background: var(--border);
   border-radius: 3px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-muted);
 }
@@ -169,8 +198,18 @@ body {
 
 /* ===== Typing indicator ===== */
 @keyframes typing-dot {
-  0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
-  30% { opacity: 1; transform: translateY(-4px); }
+
+  0%,
+  60%,
+  100% {
+    opacity: 0.3;
+    transform: translateY(0);
+  }
+
+  30% {
+    opacity: 1;
+    transform: translateY(-4px);
+  }
 }
 
 .typing-dot {
@@ -181,9 +220,18 @@ body {
   display: inline-block;
   margin: 0 2px;
 }
-.typing-dot:nth-child(1) { animation: typing-dot 1.4s infinite 0s; }
-.typing-dot:nth-child(2) { animation: typing-dot 1.4s infinite 0.2s; }
-.typing-dot:nth-child(3) { animation: typing-dot 1.4s infinite 0.4s; }
+
+.typing-dot:nth-child(1) {
+  animation: typing-dot 1.4s infinite 0s;
+}
+
+.typing-dot:nth-child(2) {
+  animation: typing-dot 1.4s infinite 0.2s;
+}
+
+.typing-dot:nth-child(3) {
+  animation: typing-dot 1.4s infinite 0.4s;
+}
 
 /* ===== Persona Card ===== */
 .persona-card {
@@ -212,6 +260,7 @@ body {
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

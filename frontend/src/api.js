@@ -1,12 +1,16 @@
 const API_BASE = '/api';
 
-export async function queryPipeline(text, personaId, compareMode = false) {
+export async function queryPipeline(text, plugId, compareMode = false) {
+    const headers = { 'Content-Type': 'application/json' };
+    if (plugId) {
+        headers['X-Plug-ID'] = plugId;
+    }
+
     const res = await fetch(`${API_BASE}/query`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify({
             text,
-            persona_id: personaId || undefined,
             compare_mode: compareMode,
         }),
     });
@@ -17,19 +21,9 @@ export async function queryPipeline(text, personaId, compareMode = false) {
     return res.json();
 }
 
-export async function listPersonas() {
-    const res = await fetch(`${API_BASE}/personas/`);
-    if (!res.ok) throw new Error('Failed to list personas');
-    return res.json();
-}
-
-export async function switchPersona(personaId) {
-    const res = await fetch(`${API_BASE}/personas/switch`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ persona_id: personaId }),
-    });
-    if (!res.ok) throw new Error('Failed to switch persona');
+export async function listPlugs() {
+    const res = await fetch(`${API_BASE}/plugs/`);
+    if (!res.ok) throw new Error('Failed to list plugs');
     return res.json();
 }
 

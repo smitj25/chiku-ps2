@@ -36,6 +36,7 @@ export default function PipelineIndicator({ steps, loading }) {
                         key={i}
                         className={`pipeline-step flex items-center gap-2 text-xs completed`}
                         title={step.details || ''}
+                        style={{ animationDelay: `${i * 150}ms` }}
                     >
                         <span>{icon}</span>
                         <span className="font-medium">{step.name}</span>

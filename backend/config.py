@@ -10,18 +10,19 @@ BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR / "data"
 CORPORA_DIR = DATA_DIR / "corpora"
 INDICES_DIR = DATA_DIR / "indices"
-NAMESPACES_FILE = DATA_DIR / "namespaces.json"
+PLUGS_DIR = DATA_DIR / "plugs"
 
 # Ensure directories exist
 CORPORA_DIR.mkdir(parents=True, exist_ok=True)
 INDICES_DIR.mkdir(parents=True, exist_ok=True)
+PLUGS_DIR.mkdir(parents=True, exist_ok=True)
 
 # -- LLM Providers --
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
 
 # Default LLM provider: "gemini" or "groq"
-LLM_PROVIDER = os.getenv("LLM_PROVIDER", "gemini")
+LLM_PROVIDER = os.getenv("LLM_PROVIDER", "groq")
 GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.0-flash")
 GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
 

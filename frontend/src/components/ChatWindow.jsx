@@ -45,7 +45,7 @@ export default function ChatWindow({ messages, loading, onSend, compareMode }) {
                                 <button
                                     key={i}
                                     onClick={() => { setInput(pq.text); }}
-                                    className="px-3 py-2 text-xs glass-card hover:border-[var(--accent)] transition-all text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+                                    className="px-3 py-2 text-xs glass-card hover:border-[var(--accent)] hover:shadow-[0_0_15px_var(--accent-glow)] hover:-translate-y-0.5 transition-all duration-300 text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                                 >
                                     {pq.label}
                                 </button>
@@ -147,7 +147,7 @@ export default function ChatWindow({ messages, loading, onSend, compareMode }) {
                     <button
                         type="submit"
                         disabled={loading || !input.trim()}
-                        className="px-5 py-3 bg-gradient-to-r from-[#6366f1] to-[#8b5cf6] rounded-xl text-sm font-semibold text-white hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap"
+                        className="px-5 py-3 bg-gradient-to-r from-[#6366f1] to-[#8b5cf6] hover:from-[#4f46e5] hover:to-[#7c3aed] rounded-xl text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 transition-all active:scale-[0.98] disabled:opacity-40 disabled:scale-100 disabled:cursor-not-allowed disabled:shadow-none whitespace-nowrap"
                     >
                         {compareMode ? '⚔️ Compare' : '🔌 Send'}
                     </button>
