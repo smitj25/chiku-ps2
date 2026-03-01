@@ -41,13 +41,13 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="bg-surface border border-border rounded-lg p-8">
+        <div className="glass rounded-xl p-8 shadow-[0_8px_40px_rgba(0,0,0,0.3)]">
             <div className="text-center mb-8">
                 <h1 className="font-display text-2xl font-bold text-text-primary mb-2">
                     Welcome back
                 </h1>
                 <p className="font-mono text-sm text-text-muted">
-                    Sign in to your SME-Plug dashboard
+                    Sign in to your Tether dashboard
                 </p>
             </div>
 
@@ -68,7 +68,7 @@ export default function LoginPage() {
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="you@company.com"
                         required
-                        className="w-full bg-canvas border border-border rounded-md px-4 py-3 font-mono text-sm text-text-primary placeholder:text-text-ghost outline-none focus:border-lime transition-colors"
+                        className="w-full bg-canvas border border-border rounded-lg px-4 py-3 font-mono text-sm text-text-primary placeholder:text-text-ghost outline-none focus:border-lime focus:shadow-[0_0_0_3px_rgba(163,230,53,0.08)] transition-all duration-200"
                     />
                 </div>
 
@@ -83,7 +83,7 @@ export default function LoginPage() {
                             onChange={(e) => setPassword(e.target.value)}
                             placeholder="••••••••"
                             required
-                            className="w-full bg-canvas border border-border rounded-md px-4 py-3 pr-12 font-mono text-sm text-text-primary placeholder:text-text-ghost outline-none focus:border-lime transition-colors"
+                            className="w-full bg-canvas border border-border rounded-lg px-4 py-3 pr-12 font-mono text-sm text-text-primary placeholder:text-text-ghost outline-none focus:border-lime focus:shadow-[0_0_0_3px_rgba(163,230,53,0.08)] transition-all duration-200"
                         />
                         <button
                             type="button"
@@ -98,7 +98,7 @@ export default function LoginPage() {
                 <button
                     type="submit"
                     disabled={loading}
-                    className="w-full bg-lime text-canvas font-mono font-bold text-sm tracking-[0.06em] py-3.5 rounded-md hover:opacity-90 transition-opacity disabled:opacity-50 cursor-pointer flex items-center justify-center gap-2"
+                    className="w-full bg-lime text-canvas font-mono font-bold text-sm tracking-[0.04em] py-3.5 rounded-lg hover:shadow-[0_0_24px_rgba(163,230,53,0.3)] transition-all duration-300 disabled:opacity-50 cursor-pointer flex items-center justify-center gap-2"
                 >
                     {loading ? (
                         <div className="w-4 h-4 border-2 border-canvas border-t-transparent rounded-full animate-spin" />

@@ -67,8 +67,8 @@ export default function DashboardPage() {
                         key={i}
                         initial={{ opacity: 0, y: 16 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: i * 0.1 }}
-                        className="bg-surface border border-border rounded-xl p-6"
+                        transition={{ delay: i * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
+                        className="bg-surface border border-border rounded-xl p-6 hover:border-border-hover transition-all duration-300"
                     >
                         <div className="font-mono text-xs text-text-faint tracking-[0.12em] mb-3 font-medium">
                             {stat.label.toUpperCase()}

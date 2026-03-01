@@ -21,16 +21,16 @@ export default async function DashboardLayout({
             <Sidebar userEmail={session.email} companyName={tenant?.companyName || "Unknown"} />
             <main className="flex-1 min-w-0 overflow-y-auto">
                 {/* Topbar */}
-                <div className="h-[70px] sticky top-0 z-30 bg-[rgba(8,8,12,0.96)] backdrop-blur-xl border-b border-border flex items-center justify-between px-6 lg:px-8">
+                <div className="h-[70px] sticky top-0 z-30 bg-[rgba(6,6,10,0.9)] backdrop-blur-2xl border-b border-border flex items-center justify-between px-6 lg:px-8">
                     <div className="lg:hidden w-8" />
-                    <div className="font-mono text-xs text-text-ghost tracking-[0.15em] font-semibold">
+                    <div className="font-mono text-[11px] text-text-ghost tracking-[0.15em] font-semibold">
                         TETHER PLATFORM
                     </div>
                     <div className="flex items-center gap-4">
-                        <div className="font-mono text-xs text-text-faint capitalize">
+                        <div className="font-mono text-[11px] text-text-faint capitalize px-3 py-1 rounded-md bg-surface border border-border">
                             {tenant?.plan || session.plan} Plan
                         </div>
-                        <div className="w-2.5 h-2.5 rounded-full bg-plug-healthcare animate-pulse" />
+                        <div className="w-2 h-2 rounded-full bg-plug-healthcare animate-pulse" />
                     </div>
                 </div>
                 <div className="px-5 py-7 lg:px-8 lg:py-8">

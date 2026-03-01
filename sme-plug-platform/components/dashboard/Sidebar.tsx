@@ -73,10 +73,10 @@ export default function Sidebar({
                     }`}
             >
                 {/* Logo */}
-                <div className="h-[70px] flex items-center justify-between px-6 border-b border-border bg-[rgba(255,255,255,0.01)]">
-                    <Link href="/" className="flex items-center gap-2.5 no-underline">
+                <div className="h-[70px] flex items-center justify-between px-6 border-b border-border">
+                    <Link href="/" className="flex items-center gap-2.5 no-underline group">
                         <div
-                            className="w-7 h-7"
+                            className="w-7 h-7 transition-transform duration-300 group-hover:scale-110"
                             style={{
                                 background: "linear-gradient(135deg, #a3e635, #65a30d)",
                                 clipPath:

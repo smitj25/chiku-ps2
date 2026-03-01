@@ -9,7 +9,7 @@ import Footer from "@/components/landing/Footer";
 
 export default function LandingPage() {
     return (
-        <div className="min-h-screen bg-canvas text-text-secondary font-display relative isolate overflow-x-hidden">
+        <div className="min-h-screen bg-canvas text-text-secondary font-display relative isolate overflow-hidden">
             <NavBar />
             <Hero />
             <StatsBar />

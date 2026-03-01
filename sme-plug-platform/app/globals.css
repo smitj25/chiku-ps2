@@ -4,22 +4,25 @@
 
 @theme inline {
   /* ── Colors ─────────────────────────────── */
-  --color-canvas: #08080c;
-  --color-canvas-subtle: #0d1117;
-  --color-surface: rgba(255, 255, 255, 0.02);
-  --color-surface-hover: rgba(255, 255, 255, 0.04);
-  --color-border: rgba(255, 255, 255, 0.06);
-  --color-border-hover: rgba(255, 255, 255, 0.12);
+  --color-canvas: #06060a;
+  --color-canvas-subtle: #0a0e14;
+  --color-surface: rgba(255, 255, 255, 0.025);
+  --color-surface-hover: rgba(255, 255, 255, 0.05);
+  --color-surface-raised: rgba(255, 255, 255, 0.035);
+  --color-border: rgba(255, 255, 255, 0.07);
+  --color-border-hover: rgba(255, 255, 255, 0.14);
+  --color-border-active: rgba(163, 230, 53, 0.3);
 
   --color-lime: #a3e635;
   --color-lime-dark: #65a30d;
+  --color-lime-glow: rgba(163, 230, 53, 0.15);
   --color-red-stat: #ef4444;
 
-  --color-text-primary: #f5f5f5;
-  --color-text-secondary: #e5e7eb;
+  --color-text-primary: #f0f0f0;
+  --color-text-secondary: #d4d4d8;
   --color-text-muted: rgba(255, 255, 255, 0.5);
   --color-text-faint: rgba(255, 255, 255, 0.3);
-  --color-text-ghost: rgba(255, 255, 255, 0.15);
+  --color-text-ghost: rgba(255, 255, 255, 0.12);
 
   --color-plug-legal: #60a5fa;
   --color-plug-healthcare: #34d399;
@@ -29,6 +32,7 @@
   --font-display: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 /* ── Resets ──────────────────────────────── */
@@ -113,6 +117,33 @@ body {
   }
 }
 
+@keyframes gridPulse {
+  0%, 100% {
+    opacity: 0.03;
+  }
+  50% {
+    opacity: 0.06;
+  }
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes scanline {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
 .animate-fade-in-up {
   animation: fadeInUp 0.6s ease forwards;
   opacity: 0;
@@ -126,6 +157,69 @@ body {
   animation: float 6s ease-in-out infinite;
 }
 
+.animate-glow-pulse {
+  animation: glowPulse 3s ease-in-out infinite;
+}
+
+/* ── Grid Background ────────────────────── */
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 64px 64px;
+  animation: gridPulse 8s ease-in-out infinite;
+}
+
+.bg-grid-dense {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.bg-dot-grid {
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* ── Glassmorphism ──────────────────────── */
+.glass {
+  background: rgba(255, 255, 255, 0.025);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.glass-hover:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ── Noise Texture ──────────────────────── */
+.noise {
+  position: relative;
+}
+
+.noise::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+/* ── Glow Effects ───────────────────────── */
+.glow-lime {
+  box-shadow: 0 0 40px rgba(163, 230, 53, 0.08), 0 0 80px rgba(163, 230, 53, 0.04);
+}
+
+.glow-border-lime {
+  border-color: rgba(163, 230, 53, 0.3);
+  box-shadow: 0 0 20px rgba(163, 230, 53, 0.05), inset 0 0 20px rgba(163, 230, 53, 0.02);
+}
+
 /* ── App Shell ──────────────────────────── */
 .page-shell {
   width: 100%;
@@ -134,21 +228,31 @@ body {
 }
 
 .page-header {
-  margin-bottom: 2rem;
-  padding-bottom: 1rem;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
   border-bottom: 1px solid var(--color-border);
 }
 
 .section-card {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 0.75rem;
+  border-radius: 0.875rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.section-card:hover {
+  border-color: var(--color-border-hover);
 }
 
 .section-card-subtle {
   background: var(--color-canvas-subtle);
   border: 1px solid var(--color-border);
-  border-radius: 0.75rem;
+  border-radius: 0.875rem;
+  transition: border-color 0.3s ease;
+}
+
+.section-card-subtle:hover {
+  border-color: var(--color-border-hover);
 }
 
 /* ── Typography System ──────────────────── */

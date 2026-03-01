@@ -1,12 +1,12 @@
 export default function TerminalSnippet() {
     return (
-        <div className="rounded-lg border border-border overflow-hidden font-mono text-[13px] leading-[1.8] bg-canvas-subtle">
+        <div className="rounded-xl border border-border overflow-hidden font-mono text-[13px] leading-[1.8] bg-[rgba(10,14,20,0.8)] backdrop-blur-sm shadow-[0_8px_40px_rgba(0,0,0,0.4)]">
             {/* Window chrome */}
-            <div className="px-4 py-2.5 bg-surface-hover border-b border-border flex items-center gap-2">
-                <div className="w-2.5 h-2.5 rounded-full bg-[#ef4444]" />
-                <div className="w-2.5 h-2.5 rounded-full bg-[#fbbf24]" />
-                <div className="w-2.5 h-2.5 rounded-full bg-[#22c55e]" />
-                <span className="text-text-ghost text-xs ml-2">index.ts</span>
+            <div className="px-4 py-3 bg-[rgba(255,255,255,0.03)] border-b border-border flex items-center gap-2">
+                <div className="w-2.5 h-2.5 rounded-full bg-[rgba(239,68,68,0.7)]" />
+                <div className="w-2.5 h-2.5 rounded-full bg-[rgba(251,191,36,0.7)]" />
+                <div className="w-2.5 h-2.5 rounded-full bg-[rgba(34,197,94,0.7)]" />
+                <span className="text-text-ghost text-[11px] ml-2 tracking-wider">index.ts</span>
             </div>
 
             {/* Code content */}
