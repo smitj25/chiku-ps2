@@ -21,11 +21,7 @@ export default async function DashboardLayout({
             <Sidebar userEmail={session.email} companyName={tenant?.companyName || "Unknown"} />
             <main className="flex-1 min-w-0 overflow-y-auto">
                 {/* Topbar */}
-                <div className="h-[70px] sticky top-0 z-30 bg-[rgba(8,8,12,0.96)] backdrop-blur-xl border-b border-border flex items-center justify-between px-6 lg:px-8">
-                    <div className="lg:hidden w-8" />
-                    <div className="font-mono text-xs text-text-ghost tracking-[0.15em] font-semibold">
-                        TETHER PLATFORM
-                    </div>
+                <div className="h-[70px] sticky top-0 z-30 bg-[rgba(8,8,12,0.8)] backdrop-blur-2xl border-b border-border flex items-center justify-end px-6 lg:px-8">
                     <div className="flex items-center gap-4">
                         <div className="font-mono text-xs text-text-faint capitalize">
                             {tenant?.plan || session.plan} Plan

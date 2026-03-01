@@ -54,8 +54,8 @@ export default function PluginDocsPage({ params }: { params: Promise<{ plugId: s
     };
 
     return (
-        <div className="space-y-8">
-            <Link href={`/plugins/${plugId}`} className="inline-flex items-center gap-1.5 font-mono text-xs text-text-muted no-underline hover:text-lime mb-6">
+        <div className="space-y-12">
+            <Link href={`/plugins/${plugId}`} className="inline-flex items-center gap-1.5 font-mono text-xs text-text-muted no-underline hover:text-lime mb-8">
                 <ArrowLeft size={14} /> Back to {docs.title}
             </Link>
 
@@ -64,19 +64,19 @@ export default function PluginDocsPage({ params }: { params: Promise<{ plugId: s
                 <p className="ui-page-subtitle">Integration guide, API reference, and configuration</p>
             </motion.div>
 
-            <div className="max-w-3xl space-y-8">
+            <div className="max-w-3xl space-y-10">
                 {docs.sections.map((section, i) => (
                     <motion.div key={i} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
-                        className="bg-surface border border-border rounded-lg p-6">
-                        <h2 className="font-display text-xl font-bold text-text-primary mb-3">{section.heading}</h2>
+                        className="section-card p-8">
+                        <h2 className="font-display text-2xl font-bold text-text-primary mb-4">{section.heading}</h2>
                         <div className="font-mono text-sm text-text-muted leading-[1.8] whitespace-pre-line mb-4">{section.content}</div>
                         {section.code && (
                             <div className="relative">
                                 <button onClick={() => copyCode(section.code!, i)}
-                                    className="absolute top-3 right-3 text-text-ghost hover:text-lime transition-colors cursor-pointer bg-transparent border-none z-10">
-                                    {copied === i ? <Check size={14} /> : <Copy size={14} />}
+                                    className="absolute top-4 right-4 text-text-ghost hover:text-lime transition-colors cursor-pointer bg-transparent border-none z-10">
+                                    {copied === i ? <Check size={16} /> : <Copy size={16} />}
                                 </button>
-                                <pre className="bg-canvas border border-border rounded-md p-4 font-mono text-xs text-text-secondary leading-[1.8] overflow-x-auto">
+                                <pre className="bg-canvas border border-border rounded-lg p-6 font-mono text-xs text-text-secondary leading-[1.8] overflow-x-auto">
                                     {section.code}
                                 </pre>
                             </div>

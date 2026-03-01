@@ -45,7 +45,7 @@ export default function DashboardPage() {
     const pctUsed = limit > 0 ? Math.round((totalCalls / limit) * 100) : 0;
 
     return (
-        <div className="space-y-10">
+        <div className="space-y-12">
             <div className="page-header">
                 <h1 className="ui-page-title text-4xl mb-3">
                     Dashboard
@@ -68,9 +68,9 @@ export default function DashboardPage() {
                         initial={{ opacity: 0, y: 16 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: i * 0.1 }}
-                        className="bg-surface border border-border rounded-xl p-6"
+                        className="section-card p-8"
                     >
-                        <div className="font-mono text-xs text-text-faint tracking-[0.12em] mb-3 font-medium">
+                        <div className="font-mono text-xs text-text-faint tracking-[0.12em] mb-4 font-medium">
                             {stat.label.toUpperCase()}
                         </div>
                         <div
@@ -96,10 +96,10 @@ export default function DashboardPage() {
                     <Link
                         key={i}
                         href={action.href}
-                        className="group bg-surface border border-border rounded-xl p-6 hover:border-border-hover transition-all no-underline flex items-center gap-5"
+                        className="group section-card p-8 hover:border-border-hover transition-all no-underline flex items-center gap-6"
                     >
                         <div
-                            className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
+                            className="w-14 h-14 rounded-xl flex items-center justify-center shrink-0"
                             style={{ background: `${action.color}15`, border: `1px solid ${action.color}30` }}
                         >
                             <action.icon size={20} style={{ color: action.color }} />
@@ -122,7 +122,7 @@ export default function DashboardPage() {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Active plugins */}
-                <div className="bg-surface border border-border rounded-xl p-7">
+                <div className="section-card p-8">
                     <div className="flex justify-between items-center mb-6">
                         <div className="font-mono text-xs text-text-faint tracking-[0.12em] font-medium">
                             ACTIVE PLUGINS
@@ -138,10 +138,10 @@ export default function DashboardPage() {
                         {ACTIVE_PLUGINS.map((plug, i) => (
                             <div
                                 key={i}
-                                className="flex items-center gap-4 p-4 rounded-lg bg-canvas border border-border"
+                                className="flex items-center gap-5 p-5 rounded-lg bg-canvas border border-border"
                             >
                                 <div
-                                    className="w-3 h-3 rounded-full shrink-0"
+                                    className="w-3.5 h-3.5 rounded-full shrink-0"
                                     style={{ background: plug.color }}
                                 />
                                 <div className="flex-1 min-w-0">
@@ -166,7 +166,7 @@ export default function DashboardPage() {
                 </div>
 
                 {/* Recent activity */}
-                <div className="bg-surface border border-border rounded-xl p-7">
+                <div className="section-card p-8">
                     <div className="font-mono text-xs text-text-faint tracking-[0.12em] font-medium mb-6">
                         RECENT ACTIVITY
                     </div>
@@ -174,9 +174,9 @@ export default function DashboardPage() {
                         {RECENT_ACTIVITY.map((item, i) => (
                             <div
                                 key={i}
-                                className="flex items-start gap-4 p-4 rounded-lg bg-canvas border border-border"
+                                className="flex items-start gap-5 p-5 rounded-lg bg-canvas border border-border"
                             >
-                                <div className="w-2 h-2 rounded-full bg-lime mt-2 shrink-0" />
+                                <div className="w-2.5 h-2.5 rounded-full bg-lime mt-1.5 shrink-0" />
                                 <div className="flex-1 min-w-0">
                                     <div className="font-mono text-sm text-text-primary font-medium">
                                         {item.action}
@@ -195,7 +195,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Usage meter */}
-            <div className="bg-surface border border-border rounded-xl p-7">
+            <div className="section-card p-8">
                 <div className="flex justify-between items-center mb-5">
                     <div className="font-mono text-xs text-text-faint tracking-[0.12em] font-medium">
                         API USAGE THIS MONTH

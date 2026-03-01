@@ -14,7 +14,7 @@ export default function NavBar() {
 
     return (
         <nav
-            className={`fixed top-0 left-0 right-0 z-50 flex h-[70px] items-center justify-between px-6 md:px-10 transition-all duration-300 ${scrolled
+            className={`fixed top-0 left-0 right-0 z-50 flex h-[80px] items-center justify-between px-6 md:px-16 transition-all duration-300 ${scrolled
                 ? "bg-[rgba(8,8,12,0.95)] backdrop-blur-xl border-b border-[rgba(255,255,255,0.06)]"
                 : "bg-transparent border-b border-transparent"
                 }`}
@@ -57,7 +57,7 @@ export default function NavBar() {
                 </Link>
                 <Link
                     href="/register"
-                    className="font-mono text-[13px] bg-lime text-canvas font-bold tracking-wider px-4 py-2 rounded-sm hover:opacity-85 transition-opacity no-underline"
+                    className="font-mono text-[13px] bg-lime text-canvas font-bold tracking-[0.05em] px-5 py-2.5 rounded hover:opacity-90 transition-all shadow-[0_0_15px_rgba(163,230,53,0.3)] no-underline"
                 >
                     GET STARTED →
                 </Link>

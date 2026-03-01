@@ -18,16 +18,20 @@ function PlugCard({ plug, index }: { plug: Plug; index: number }) {
             transition={{ delay: index * 0.1 }}
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
-            className="rounded-lg p-7 cursor-default transition-all duration-300 h-full flex flex-col"
+            className="rounded-xl p-10 cursor-default transition-all duration-300 h-full flex flex-col"
             style={{
                 background: hovered ? plug.bg : "rgba(255,255,255,0.02)",
                 border: `1px solid ${hovered ? plug.border : "rgba(255,255,255,0.06)"}`,
+                backdropFilter: "blur(12px)",
+                WebkitBackdropFilter: "blur(12px)",
+                boxShadow: hovered ? "0 8px 32px rgba(0, 0, 0, 0.4)" : "none",
+                transform: hovered ? "translateY(-4px)" : "none",
             }}
         >
             {/* Header */}
             <div className="flex justify-between items-start mb-4">
                 <div
-                    className="w-11 h-11 rounded-lg flex items-center justify-center text-xl"
+                    className="w-12 h-12 rounded-xl flex items-center justify-center text-[22px]"
                     style={{
                         background: plug.bg,
                         border: `1px solid ${plug.border}`,
@@ -56,7 +60,7 @@ function PlugCard({ plug, index }: { plug: Plug; index: number }) {
             </div>
 
             {/* Name */}
-            <div className="text-xl font-bold text-text-primary mb-3 tracking-[-0.02em] font-display">
+            <div className="text-[22px] font-bold text-text-primary mb-4 tracking-[-0.02em] font-display">
                 {plug.name}
             </div>
 
@@ -74,7 +78,7 @@ function PlugCard({ plug, index }: { plug: Plug; index: number }) {
 
             {/* Example query */}
             <div
-                className="rounded-md p-3 font-mono text-xs text-text-muted mb-5 italic leading-[1.5] min-h-[96px]"
+                className="rounded-md p-4 font-mono text-xs text-text-muted mb-6 italic leading-[1.6] min-h-[96px]"
                 style={{
                     background: "rgba(0,0,0,0.3)",
                     borderLeft: `2px solid ${plug.color}`,
@@ -84,15 +88,15 @@ function PlugCard({ plug, index }: { plug: Plug; index: number }) {
             </div>
 
             {/* Footer */}
-            <div className="flex justify-between items-center mt-auto pt-4 border-t border-border">
+            <div className="flex justify-between items-center mt-auto pt-6 border-t border-border">
                 <div>
-                    <span className="font-mono text-[22px] font-bold text-text-primary">
+                    <span className="font-mono text-[24px] font-bold text-text-primary">
                         ${plug.price}
                     </span>
-                    <span className="font-mono text-xs text-text-faint">/plug/mo</span>
+                    <span className="font-mono text-xs text-text-faint ml-1">/plug/mo</span>
                 </div>
                 <button
-                    className="font-mono text-xs font-bold tracking-[0.05em] px-4 py-2 cursor-pointer transition-all duration-200"
+                    className="font-mono text-xs font-bold tracking-[0.05em] px-5 py-2.5 rounded-[3px] cursor-pointer transition-all duration-200"
                     style={{
                         background: hovered ? plug.color : "transparent",
                         border: `1px solid ${plug.color}`,
@@ -110,9 +114,9 @@ export default function PlugShowcase() {
     return (
         <section
             id="marketplace"
-            className="py-24 px-6 md:px-20 bg-canvas-subtle border-y border-border"
+            className="py-32 px-6 md:px-16 bg-canvas-subtle border-y border-border"
         >
-            <div className="max-w-[1200px] mx-auto">
+            <div className="max-w-[1240px] mx-auto">
                 {/* Header */}
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-4">
                     <div>
@@ -132,7 +136,7 @@ export default function PlugShowcase() {
                 </div>
 
                 {/* Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     {PLUGS.map((plug, i) => (
                         <PlugCard key={plug.id} plug={plug} index={i} />
                     ))}

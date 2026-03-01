@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { backendUrl, publicRuntime } from "@/lib/public-runtime";
+import { useOwnedPlugins } from "@/lib/useOwnedPlugins";
+import { ALL_PLUGS } from "@/lib/data";
 
 interface Document {
     filename: string;
@@ -9,20 +11,24 @@ interface Document {
     uploaded: string;
 }
 
-const PLUGINS = [
-    { id: 'legal', label: '⚖ Legal', color: '#60a5fa' },
-    { id: 'healthcare', label: '⚕ Healthcare', color: '#34d399' },
-    { id: 'engineering', label: '⚙ Engineering', color: '#fbbf24' },
-];
-
 export default function DocumentsPage() {
-    const [activePlugin, setActivePlugin] = useState('legal');
+    const { owned, ready: ownedReady } = useOwnedPlugins();
+    const myPlugins = owned.map(id => ALL_PLUGS.find(p => p.id === id)).filter(Boolean) as typeof ALL_PLUGS;
+
+    const [activePlugin, setActivePlugin] = useState<string>('');
     const [documents, setDocuments] = useState<Document[]>([]);
     const [uploading, setUploading] = useState(false);
     const [dragOver, setDragOver] = useState(false);
     const [message, setMessage] = useState('');
 
+    useEffect(() => {
+        if (ownedReady && owned.length > 0 && !activePlugin) {
+            setActivePlugin(owned[0]);
+        }
+    }, [ownedReady, owned, activePlugin]);
+
     const fetchDocs = useCallback(async () => {
+        if (!activePlugin) return;
         try {
             const res = await fetch(
                 `${backendUrl("/v1/documents")}?plugin_id=${activePlugin}`,
@@ -77,10 +83,13 @@ export default function DocumentsPage() {
         }
     };
 
-    const pluginColor = PLUGINS.find(p => p.id === activePlugin)?.color || '#888';
+    const activePluginData = myPlugins.find(p => p.id === activePlugin);
+    const pluginColor = activePluginData?.color || '#888';
+
+    if (!ownedReady) return null;
 
     return (
-        <div className="space-y-8">
+        <div className="space-y-12">
             {/* Header */}
             <div className="page-header flex items-center justify-between">
                 <div>
@@ -92,21 +101,26 @@ export default function DocumentsPage() {
             </div>
 
             {/* Plugin Selector */}
-            <div className="section-card p-3 flex gap-3 overflow-x-auto">
-                {PLUGINS.map(p => (
+            <div className="section-card p-4 flex gap-4 overflow-x-auto">
+                {myPlugins.map(p => (
                     <button
                         key={p.id}
                         onClick={() => setActivePlugin(p.id)}
-                        className="px-5 py-2.5 rounded-lg font-mono text-sm font-bold tracking-wide transition-all"
+                        className="px-6 py-3 rounded-lg font-mono text-sm font-bold tracking-wide transition-all whitespace-nowrap"
                         style={{
                             background: activePlugin === p.id ? p.color + '22' : '#161b22',
                             border: `2px solid ${activePlugin === p.id ? p.color : '#30363d'}`,
                             color: activePlugin === p.id ? p.color : '#8b949e',
                         }}
                     >
-                        {p.label}
+                        {p.icon} {p.name.replace(' SME', '')}
                     </button>
                 ))}
+                {myPlugins.length === 0 && (
+                    <div className="text-text-ghost font-mono text-sm py-2 px-4">
+                        You don't own any plugins yet.
+                    </div>
+                )}
             </div>
 
             {/* Upload Zone */}
@@ -114,7 +128,7 @@ export default function DocumentsPage() {
                 onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
                 onDragLeave={() => setDragOver(false)}
                 onDrop={(e) => { e.preventDefault(); setDragOver(false); handleUpload(e.dataTransfer.files); }}
-                className="relative rounded-xl p-10 text-center transition-all cursor-pointer"
+                className="relative rounded-xl p-16 text-center transition-all cursor-pointer"
                 style={{
                     border: `2px dashed ${dragOver ? pluginColor : '#30363d'}`,
                     background: dragOver ? pluginColor + '08' : '#0d1117',
@@ -141,7 +155,7 @@ export default function DocumentsPage() {
             {/* Status Message */}
             {message && (
                 <div
-                    className="px-4 py-3 rounded-lg font-mono text-sm"
+                    className="px-6 py-4 rounded-lg font-mono text-sm"
                     style={{
                         background: message.startsWith('✓') ? '#0a1a0a' : message.startsWith('✗') ? '#1a0a0a' : '#161b22',
                         border: `1px solid ${message.startsWith('✓') ? '#3fb95040' : message.startsWith('✗') ? '#f8514940' : '#30363d'}`,
@@ -155,14 +169,14 @@ export default function DocumentsPage() {
             {/* Documents Table */}
             <div className="section-card overflow-hidden">
                 <div
-                    className="px-5 py-3 font-mono text-xs font-bold tracking-widest uppercase"
+                    className="px-6 py-4 font-mono text-xs font-bold tracking-widest uppercase"
                     style={{ background: '#161b22', color: pluginColor, borderBottom: '1px solid #30363d' }}
                 >
-                    {activePlugin.toUpperCase()} KNOWLEDGE BASE · {documents.length} document{documents.length !== 1 ? 's' : ''}
+                    {(activePluginData?.name || '').toUpperCase()} KNOWLEDGE BASE · {documents.length} document{documents.length !== 1 ? 's' : ''}
                 </div>
 
                 {documents.length === 0 ? (
-                    <div className="px-5 py-12 text-center" style={{ background: '#0d1117' }}>
+                    <div className="px-6 py-16 text-center" style={{ background: '#0d1117' }}>
                         <p className="text-[#484f58] text-lg">No documents uploaded yet</p>
                         <p className="text-[#484f58] text-sm mt-1">
                             Upload a PDF above to start building your knowledge base
@@ -172,28 +186,28 @@ export default function DocumentsPage() {
                     <table className="w-full" style={{ background: '#0d1117' }}>
                         <thead>
                             <tr style={{ background: '#161b22', borderBottom: '1px solid #30363d' }}>
-                                <th className="text-left px-5 py-3 text-[#8b949e] text-xs font-mono uppercase tracking-wider">Filename</th>
-                                <th className="text-left px-5 py-3 text-[#8b949e] text-xs font-mono uppercase tracking-wider">Size</th>
-                                <th className="text-left px-5 py-3 text-[#8b949e] text-xs font-mono uppercase tracking-wider">Uploaded</th>
-                                <th className="text-right px-5 py-3 text-[#8b949e] text-xs font-mono uppercase tracking-wider">Actions</th>
+                                <th className="text-left px-6 py-4 text-[#8b949e] text-xs font-mono uppercase tracking-wider">Filename</th>
+                                <th className="text-left px-6 py-4 text-[#8b949e] text-xs font-mono uppercase tracking-wider">Size</th>
+                                <th className="text-left px-6 py-4 text-[#8b949e] text-xs font-mono uppercase tracking-wider">Uploaded</th>
+                                <th className="text-right px-6 py-4 text-[#8b949e] text-xs font-mono uppercase tracking-wider">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {documents.map((doc, i) => (
                                 <tr key={i} className="border-t" style={{ borderColor: '#21262d' }}>
-                                    <td className="px-5 py-3">
+                                    <td className="px-6 py-4">
                                         <span className="text-white font-mono text-sm">📄 {doc.filename}</span>
                                     </td>
-                                    <td className="px-5 py-3 text-[#8b949e] text-sm font-mono">
+                                    <td className="px-6 py-4 text-[#8b949e] text-sm font-mono">
                                         {doc.size_kb} KB
                                     </td>
-                                    <td className="px-5 py-3 text-[#8b949e] text-sm font-mono">
+                                    <td className="px-6 py-4 text-[#8b949e] text-sm font-mono">
                                         {new Date(doc.uploaded).toLocaleDateString()}
                                     </td>
-                                    <td className="px-5 py-3 text-right">
+                                    <td className="px-6 py-4 text-right">
                                         <button
                                             onClick={() => handleDelete(doc.filename)}
-                                            className="text-[#f85149] hover:text-[#ff7b72] text-xs font-mono font-bold tracking-wide px-3 py-1 rounded transition-colors"
+                                            className="text-[#f85149] hover:text-[#ff7b72] text-xs font-mono font-bold tracking-wide px-3 py-1.5 rounded transition-colors"
                                             style={{ background: '#f8514910', border: '1px solid #f8514930' }}
                                         >
                                             DELETE
@@ -207,16 +221,16 @@ export default function DocumentsPage() {
             </div>
 
             {/* How it works */}
-            <div className="section-card-subtle p-6">
-                <h3 className="text-white font-bold text-sm mb-3 font-mono tracking-wide">HOW RAG CITATIONS WORK</h3>
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-center">
+            <div className="section-card-subtle p-8">
+                <h3 className="text-white font-bold text-sm mb-4 font-mono tracking-wide">HOW RAG CITATIONS WORK</h3>
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-5 text-center">
                     {[
                         { emoji: '📄', text: 'Upload PDF/TXT to your plugin' },
                         { emoji: '🔪', text: 'Document is chunked into 512-word blocks' },
                         { emoji: '🧠', text: 'Chunks are embedded into ChromaDB' },
                         { emoji: '✅', text: 'Chat queries retrieve real chunks → real citations' },
                     ].map((step, i) => (
-                        <div key={i} className="p-4 rounded-lg" style={{ background: '#0d1117', border: '1px solid #21262d' }}>
+                        <div key={i} className="p-6 rounded-lg" style={{ background: '#0d1117', border: '1px solid #21262d' }}>
                             <div className="text-2xl mb-2">{step.emoji}</div>
                             <p className="text-[#8b949e] text-xs">{step.text}</p>
                         </div>

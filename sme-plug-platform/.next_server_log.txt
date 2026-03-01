@@ -1,0 +1,127 @@
+
+> sme-plug-platform@0.1.0 dev
+> next dev
+
+⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of /Users/rehaankhatri/package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * /Users/rehaankhatri/chiku/sme-plug-platform/package-lock.json
+
+▲ Next.js 16.1.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://10.130.121.174:3000
+- Environments: .env
+
+✓ Starting...
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+✓ Ready in 977ms
+ GET / 200 in 785ms (compile: 577ms, proxy.ts: 2ms, render: 206ms)
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."companyName", "public"."Tenant"."plan" FROM "public"."Tenant" WHERE ("public"."Tenant"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+ GET /plugins/finance 200 in 3.2s (compile: 1097ms, proxy.ts: 35ms, render: 2.0s)
+ GET /api/plugins/finance 200 in 697ms (compile: 687ms, render: 9ms)
+ GET /documents 200 in 75ms (compile: 19ms, proxy.ts: 1921µs, render: 54ms)
+✓ Compiled in 155ms
+ GET /documents 307 in 156ms (compile: 57ms, proxy.ts: 3ms, render: 96ms)
+prisma:query SELECT "public"."Purchase"."id", "public"."Purchase"."pluginId" FROM "public"."Purchase" WHERE ("public"."Purchase"."tenantId" = $1 AND "public"."Purchase"."status" = $2) OFFSET $3
+ GET /api/plugins/owned 200 in 1598ms (compile: 42ms, render: 1556ms)
+ GET /api-keys 200 in 391ms (compile: 362ms, render: 29ms)
+prisma:query SELECT 1
+prisma:query SELECT "public"."ApiKey"."id", "public"."ApiKey"."name", "public"."ApiKey"."pluginId", "public"."ApiKey"."prefix", "public"."ApiKey"."createdAt", "public"."ApiKey"."lastUsed", "public"."ApiKey"."revokedAt" FROM "public"."ApiKey" WHERE "public"."ApiKey"."tenantId" = $1 ORDER BY "public"."ApiKey"."createdAt" DESC OFFSET $2
+ GET /api/keys 200 in 622ms (compile: 146ms, render: 475ms)
+prisma:query SELECT "public"."ApiKey"."id", "public"."ApiKey"."name", "public"."ApiKey"."pluginId", "public"."ApiKey"."prefix", "public"."ApiKey"."createdAt", "public"."ApiKey"."lastUsed", "public"."ApiKey"."revokedAt" FROM "public"."ApiKey" WHERE "public"."ApiKey"."tenantId" = $1 ORDER BY "public"."ApiKey"."createdAt" DESC OFFSET $2
+ GET /api/keys 200 in 1744ms (compile: 152ms, render: 1591ms)
+ GET /plugins 200 in 38ms (compile: 24ms, proxy.ts: 2ms, render: 12ms)
+prisma:query SELECT "public"."Purchase"."id", "public"."Purchase"."pluginId" FROM "public"."Purchase" WHERE ("public"."Purchase"."tenantId" = $1 AND "public"."Purchase"."status" = $2) OFFSET $3
+prisma:query SELECT COUNT("public"."ApiCall"."id"), MAX("public"."ApiCall"."createdAt"), "public"."ApiCall"."plugId" FROM "public"."ApiCall" WHERE "public"."ApiCall"."tenantId" = $1 GROUP BY "public"."ApiCall"."plugId" OFFSET $2
+ GET /api/plugins/usage 200 in 397ms (compile: 41ms, render: 355ms)
+ GET /api/plugins/owned 200 in 395ms (compile: 1270µs, render: 393ms)
+prisma:query SELECT "public"."Plugin"."id", "public"."Plugin"."slug", "public"."Plugin"."name", "public"."Plugin"."domain", "public"."Plugin"."description", "public"."Plugin"."color", "public"."Plugin"."price", "public"."Plugin"."ragasScore" FROM "public"."Plugin" WHERE 1=1 ORDER BY "public"."Plugin"."name" ASC OFFSET $1
+ GET /api/plugins 200 in 1328ms (compile: 63ms, render: 1264ms)
+ GET /plugins/legal 200 in 20ms (compile: 7ms, proxy.ts: 1775µs, render: 11ms)
+ GET /documents 200 in 13ms (compile: 3ms, proxy.ts: 2ms, render: 9ms)
+prisma:query SELECT "public"."Purchase"."id", "public"."Purchase"."pluginId" FROM "public"."Purchase" WHERE ("public"."Purchase"."tenantId" = $1 AND "public"."Purchase"."status" = $2) OFFSET $3
+ GET /api/plugins/owned 200 in 271ms (compile: 4ms, render: 267ms)
+✓ Compiled in 68ms
+prisma:query SELECT 1
+prisma:query SELECT "public"."Purchase"."id", "public"."Purchase"."pluginId" FROM "public"."Purchase" WHERE ("public"."Purchase"."tenantId" = $1 AND "public"."Purchase"."status" = $2) OFFSET $3
+ GET /api/plugins/owned 200 in 274ms (compile: 6ms, render: 268ms)
+ GET /marketplace 200 in 58ms (compile: 39ms, proxy.ts: 3ms, render: 17ms)
+prisma:query SELECT 1
+prisma:query SELECT 1
+prisma:query SELECT "public"."Purchase"."id", "public"."Purchase"."pluginId" FROM "public"."Purchase" WHERE ("public"."Purchase"."tenantId" = $1 AND "public"."Purchase"."status" = $2) OFFSET $3
+ GET /api/plugins/owned 200 in 269ms (compile: 5ms, render: 264ms)
+prisma:query SELECT "public"."Plugin"."id", "public"."Plugin"."slug", "public"."Plugin"."name", "public"."Plugin"."domain", "public"."Plugin"."description", "public"."Plugin"."color", "public"."Plugin"."price", "public"."Plugin"."ragasScore" FROM "public"."Plugin" WHERE 1=1 ORDER BY "public"."Plugin"."name" ASC OFFSET $1
+ GET /api/plugins 200 in 401ms (compile: 6ms, render: 396ms)
+ GET /plugins 200 in 15ms (compile: 4ms, proxy.ts: 1903µs, render: 9ms)
+prisma:query SELECT "public"."Purchase"."id", "public"."Purchase"."pluginId" FROM "public"."Purchase" WHERE ("public"."Purchase"."tenantId" = $1 AND "public"."Purchase"."status" = $2) OFFSET $3
+ GET /api/plugins/owned 200 in 216ms (compile: 2ms, render: 214ms)
+prisma:query SELECT 1
+prisma:query SELECT COUNT("public"."ApiCall"."id"), MAX("public"."ApiCall"."createdAt"), "public"."ApiCall"."plugId" FROM "public"."ApiCall" WHERE "public"."ApiCall"."tenantId" = $1 GROUP BY "public"."ApiCall"."plugId" OFFSET $2
+ GET /api/plugins/usage 200 in 336ms (compile: 1422µs, render: 335ms)
+prisma:query SELECT "public"."Plugin"."id", "public"."Plugin"."slug", "public"."Plugin"."name", "public"."Plugin"."domain", "public"."Plugin"."description", "public"."Plugin"."color", "public"."Plugin"."price", "public"."Plugin"."ragasScore" FROM "public"."Plugin" WHERE 1=1 ORDER BY "public"."Plugin"."name" ASC OFFSET $1
+ GET /api/plugins 200 in 562ms (compile: 2ms, render: 560ms)
+ GET /documents 200 in 14ms (compile: 4ms, proxy.ts: 1449µs, render: 9ms)
+prisma:query SELECT "public"."Purchase"."id", "public"."Purchase"."pluginId" FROM "public"."Purchase" WHERE ("public"."Purchase"."tenantId" = $1 AND "public"."Purchase"."status" = $2) OFFSET $3
+ GET /api/plugins/owned 200 in 192ms (compile: 1937µs, render: 190ms)
+ GET /marketplace 200 in 14ms (compile: 3ms, proxy.ts: 1696µs, render: 9ms)
+prisma:query SELECT 1
+prisma:query SELECT "public"."Purchase"."id", "public"."Purchase"."pluginId" FROM "public"."Purchase" WHERE ("public"."Purchase"."tenantId" = $1 AND "public"."Purchase"."status" = $2) OFFSET $3
+ GET /api/plugins/owned 200 in 158ms (compile: 1817µs, render: 157ms)
+prisma:query SELECT "public"."Plugin"."id", "public"."Plugin"."slug", "public"."Plugin"."name", "public"."Plugin"."domain", "public"."Plugin"."description", "public"."Plugin"."color", "public"."Plugin"."price", "public"."Plugin"."ragasScore" FROM "public"."Plugin" WHERE 1=1 ORDER BY "public"."Plugin"."name" ASC OFFSET $1
+ GET /api/plugins 200 in 347ms (compile: 4ms, render: 343ms)
+prisma:query SELECT "public"."Purchase"."id", "public"."Purchase"."tenantId", "public"."Purchase"."pluginId", "public"."Purchase"."stripeSubId", "public"."Purchase"."status", "public"."Purchase"."createdAt" FROM "public"."Purchase" WHERE ("public"."Purchase"."tenantId" = $1 AND "public"."Purchase"."pluginId" = $2) LIMIT $3 OFFSET $4
+prisma:query INSERT INTO "public"."Purchase" ("id","tenantId","pluginId","status","createdAt") VALUES ($1,$2,$3,$4,$5) RETURNING "public"."Purchase"."id", "public"."Purchase"."tenantId", "public"."Purchase"."pluginId", "public"."Purchase"."stripeSubId", "public"."Purchase"."status", "public"."Purchase"."createdAt"
+prisma:query SELECT "public"."Purchase"."id", "public"."Purchase"."tenantId", "public"."Purchase"."pluginId", "public"."Purchase"."stripeSubId", "public"."Purchase"."status", "public"."Purchase"."createdAt" FROM "public"."Purchase" WHERE ("public"."Purchase"."tenantId" = $1 AND "public"."Purchase"."status" = $2) OFFSET $3
+ POST /api/plugins/buy 200 in 814ms (compile: 27ms, render: 787ms)
+prisma:query SELECT "public"."Purchase"."id", "public"."Purchase"."pluginId" FROM "public"."Purchase" WHERE ("public"."Purchase"."tenantId" = $1 AND "public"."Purchase"."status" = $2) OFFSET $3
+ GET /api/plugins/owned 200 in 132ms (compile: 875µs, render: 131ms)
+ GET /plugins 200 in 12ms (compile: 3ms, proxy.ts: 1508µs, render: 7ms)
+prisma:query SELECT "public"."Purchase"."id", "public"."Purchase"."pluginId" FROM "public"."Purchase" WHERE ("public"."Purchase"."tenantId" = $1 AND "public"."Purchase"."status" = $2) OFFSET $3
+prisma:query SELECT 1
+prisma:query SELECT 1
+ GET /api/plugins/owned 200 in 187ms (compile: 5ms, render: 183ms)
+prisma:query SELECT "public"."Plugin"."id", "public"."Plugin"."slug", "public"."Plugin"."name", "public"."Plugin"."domain", "public"."Plugin"."description", "public"."Plugin"."color", "public"."Plugin"."price", "public"."Plugin"."ragasScore" FROM "public"."Plugin" WHERE 1=1 ORDER BY "public"."Plugin"."name" ASC OFFSET $1
+ GET /api/plugins 200 in 315ms (compile: 8ms, render: 307ms)
+prisma:query SELECT COUNT("public"."ApiCall"."id"), MAX("public"."ApiCall"."createdAt"), "public"."ApiCall"."plugId" FROM "public"."ApiCall" WHERE "public"."ApiCall"."tenantId" = $1 GROUP BY "public"."ApiCall"."plugId" OFFSET $2
+ GET /api/plugins/usage 200 in 488ms (compile: 8ms, render: 480ms)
+ GET /documents 200 in 14ms (compile: 3ms, proxy.ts: 1690µs, render: 9ms)
+prisma:query SELECT "public"."Purchase"."id", "public"."Purchase"."pluginId" FROM "public"."Purchase" WHERE ("public"."Purchase"."tenantId" = $1 AND "public"."Purchase"."status" = $2) OFFSET $3
+ GET /api/plugins/owned 200 in 189ms (compile: 3ms, render: 185ms)
+ GET /marketplace 200 in 13ms (compile: 3ms, proxy.ts: 1372µs, render: 8ms)
+prisma:query SELECT "public"."Plugin"."id", "public"."Plugin"."slug", "public"."Plugin"."name", "public"."Plugin"."domain", "public"."Plugin"."description", "public"."Plugin"."color", "public"."Plugin"."price", "public"."Plugin"."ragasScore" FROM "public"."Plugin" WHERE 1=1 ORDER BY "public"."Plugin"."name" ASC OFFSET $1
+ GET /api/plugins 200 in 139ms (compile: 1074µs, render: 137ms)
+prisma:query SELECT "public"."Purchase"."id", "public"."Purchase"."pluginId" FROM "public"."Purchase" WHERE ("public"."Purchase"."tenantId" = $1 AND "public"."Purchase"."status" = $2) OFFSET $3
+ GET /api/plugins/owned 200 in 156ms (compile: 1196µs, render: 155ms)
+ GET /documents 200 in 13ms (compile: 3ms, proxy.ts: 1329µs, render: 9ms)
+prisma:query SELECT 1
+prisma:query SELECT "public"."Purchase"."id", "public"."Purchase"."pluginId" FROM "public"."Purchase" WHERE ("public"."Purchase"."tenantId" = $1 AND "public"."Purchase"."status" = $2) OFFSET $3
+ GET /api/plugins/owned 200 in 349ms (compile: 3ms, render: 346ms)
+prisma:query SELECT 1
+prisma:query SELECT "public"."Purchase"."id", "public"."Purchase"."pluginId" FROM "public"."Purchase" WHERE ("public"."Purchase"."tenantId" = $1 AND "public"."Purchase"."status" = $2) OFFSET $3
+ GET /api/plugins/owned 200 in 318ms (compile: 5ms, render: 313ms)
+prisma:query SELECT "public"."Purchase"."id", "public"."Purchase"."pluginId" FROM "public"."Purchase" WHERE ("public"."Purchase"."tenantId" = $1 AND "public"."Purchase"."status" = $2) OFFSET $3
+ GET /api/plugins/owned 200 in 156ms (compile: 1915µs, render: 154ms)
+prisma:query SELECT 1
+prisma:query SELECT "public"."Purchase"."id", "public"."Purchase"."pluginId" FROM "public"."Purchase" WHERE ("public"."Purchase"."tenantId" = $1 AND "public"."Purchase"."status" = $2) OFFSET $3
+ GET /api/plugins/owned 200 in 314ms (compile: 4ms, render: 309ms)
+prisma:query SELECT "public"."Purchase"."id", "public"."Purchase"."pluginId" FROM "public"."Purchase" WHERE ("public"."Purchase"."tenantId" = $1 AND "public"."Purchase"."status" = $2) OFFSET $3
+ GET /api/plugins/owned 200 in 162ms (compile: 2ms, render: 160ms)
+prisma:query SELECT "public"."Purchase"."id", "public"."Purchase"."pluginId" FROM "public"."Purchase" WHERE ("public"."Purchase"."tenantId" = $1 AND "public"."Purchase"."status" = $2) OFFSET $3
+ GET /api/plugins/owned 200 in 1589ms (compile: 3ms, render: 1586ms)
+prisma:query SELECT 1
+prisma:query SELECT "public"."Purchase"."id", "public"."Purchase"."pluginId" FROM "public"."Purchase" WHERE ("public"."Purchase"."tenantId" = $1 AND "public"."Purchase"."status" = $2) OFFSET $3
+ GET /api/plugins/owned 200 in 370ms (compile: 5ms, render: 364ms)
+prisma:query SELECT 1
+prisma:query SELECT "public"."Purchase"."id", "public"."Purchase"."pluginId" FROM "public"."Purchase" WHERE ("public"."Purchase"."tenantId" = $1 AND "public"."Purchase"."status" = $2) OFFSET $3
+ GET /api/plugins/owned 200 in 306ms (compile: 2ms, render: 304ms)
+prisma:query SELECT "public"."Purchase"."id", "public"."Purchase"."pluginId" FROM "public"."Purchase" WHERE ("public"."Purchase"."tenantId" = $1 AND "public"."Purchase"."status" = $2) OFFSET $3
+ GET /api/plugins/owned 200 in 162ms (compile: 2ms, render: 159ms)
+✓ Compiled in 77ms
+prisma:query SELECT 1
+prisma:query SELECT "public"."Purchase"."id", "public"."Purchase"."pluginId" FROM "public"."Purchase" WHERE ("public"."Purchase"."tenantId" = $1 AND "public"."Purchase"."status" = $2) OFFSET $3
+ GET /api/plugins/owned 200 in 347ms (compile: 4ms, render: 342ms)
+prisma:query SELECT "public"."Purchase"."id", "public"."Purchase"."pluginId" FROM "public"."Purchase" WHERE ("public"."Purchase"."tenantId" = $1 AND "public"."Purchase"."status" = $2) OFFSET $3
+ GET /api/plugins/owned 200 in 173ms (compile: 1103µs, render: 172ms)
+✓ Compiled in 98ms

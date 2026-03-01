@@ -15,7 +15,7 @@ function CitationBadge({ text }: { text: string }) {
 
 export default function Hero() {
     return (
-        <section className="min-h-[calc(100vh-4rem)] flex items-center px-6 md:px-20 pt-28 pb-20 relative overflow-hidden border-b border-border">
+        <section className="min-h-screen flex items-center px-6 md:px-16 pt-32 pb-24 relative overflow-hidden border-b border-border">
             {/* BG Glow */}
             <div
                 className="absolute pointer-events-none"
@@ -29,7 +29,7 @@ export default function Hero() {
                 }}
             />
 
-            <div className="max-w-[1200px] mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            <div className="max-w-[1240px] mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
                 {/* Left: Copy */}
                 <motion.div
                     initial={{ opacity: 0, y: 24 }}
@@ -49,23 +49,23 @@ export default function Hero() {
                         <span className="text-lime">Cites Its Sources</span>
                     </h1>
 
-                    <p className="font-mono text-[15px] text-text-muted ui-copy max-w-[56ch] mb-10">
+                    <p className="font-mono text-base text-text-muted leading-[1.8] max-w-[50ch] mb-12">
                         Hot-swappable AI expert plugins for enterprise. Legal, Healthcare,
                         Engineering. Every claim verified. Every fact cited. Zero
                         hallucinations. Import to VS Code, Cursor, or any codebase in 60
                         seconds.
                     </p>
 
-                    <div className="flex gap-4 flex-wrap">
+                    <div className="flex gap-5 flex-wrap">
                         <Link
                             href="/register"
-                            className="bg-lime text-canvas font-mono font-bold text-sm tracking-[0.06em] px-7 py-3.5 hover:opacity-85 transition-opacity no-underline inline-block"
+                            className="bg-lime text-canvas font-mono font-bold text-sm tracking-[0.06em] px-8 py-4 hover:opacity-90 hover:-translate-y-0.5 transition-all shadow-lg rounded-[4px] no-underline inline-block"
                         >
                             START FOR FREE →
                         </Link>
                         <a
                             href="#marketplace"
-                            className="bg-transparent border border-border-hover text-text-muted font-mono text-sm tracking-[0.06em] px-7 py-3.5 hover:border-[rgba(255,255,255,0.4)] transition-colors no-underline inline-block"
+                            className="bg-[rgba(255,255,255,0.02)] border border-border-hover text-text-muted font-mono text-sm tracking-[0.06em] px-8 py-4 hover:bg-[rgba(255,255,255,0.05)] hover:text-text-primary transition-all rounded-[4px] no-underline inline-block"
                         >
                             VIEW DEMO
                         </a>
@@ -98,18 +98,19 @@ export default function Hero() {
                     <TerminalSnippet />
 
                     {/* Sample Response */}
-                    <div className="mt-5 bg-surface border border-border rounded-lg p-4 font-mono text-xs shadow-[0_0_0_1px_rgba(255,255,255,0.02)]">
-                        <div className="text-text-faint mb-2.5 text-[11px] tracking-[0.05em]">
-                            → RESPONSE
+                    <div className="mt-8 section-card p-6 font-mono text-xs">
+                        <div className="text-text-faint mb-3 text-[11px] tracking-[0.05em] flex items-center gap-2">
+                            <span className="w-1.5 h-1.5 rounded-full bg-lime animate-pulse-lime" />
+                            RESPONSE
                         </div>
-                        <div className="text-[rgba(255,255,255,0.7)] leading-[1.6] mb-2.5">
+                        <div className="text-[rgba(255,255,255,0.85)] leading-[1.7] mb-4">
                             Clause 4.2 creates unlimited liability exposure under GDPR Article
                             83(5)...
                         </div>
-                        <div className="flex gap-2 flex-wrap">
+                        <div className="flex gap-3 flex-wrap">
                             <CitationBadge text="GDPR Art.83, pg 47" />
                             <CitationBadge text="Contract_v3.pdf, pg 12" />
-                            <span className="inline-flex items-center gap-1 bg-[rgba(52,211,153,0.1)] border border-[rgba(52,211,153,0.3)] text-plug-healthcare rounded-[3px] px-2 py-0.5 text-[11px] font-mono">
+                            <span className="inline-flex items-center gap-1.5 bg-[rgba(52,211,153,0.1)] border border-[rgba(52,211,153,0.3)] text-plug-healthcare rounded-[3px] px-2.5 py-1 text-[11px] font-mono">
                                 ✓ Verified
                             </span>
                         </div>

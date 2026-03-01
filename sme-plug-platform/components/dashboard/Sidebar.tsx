@@ -16,6 +16,8 @@ import {
     FileText,
     GitCompareArrows,
     Database,
+    ChevronLeft,
+    ChevronRight,
 } from "lucide-react";
 
 const NAV_ITEMS = [
@@ -39,6 +41,7 @@ export default function Sidebar({
 }) {
     const pathname = usePathname();
     const [mobileOpen, setMobileOpen] = useState(false);
+    const [collapsed, setCollapsed] = useState(false);
 
     const initials = companyName
         ? companyName.substring(0, 2).toUpperCase()
@@ -69,34 +72,47 @@ export default function Sidebar({
 
             {/* Sidebar */}
             <aside
-                className={`fixed lg:relative top-0 left-0 h-screen w-[272px] bg-canvas-subtle border-r border-border flex flex-col z-50 transition-transform duration-300 ${mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
-                    }`}
+                className={`fixed lg:relative top-0 left-0 h-screen bg-canvas-subtle border-r border-border flex flex-col z-50 transition-all duration-300 ${mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+                    } ${collapsed ? "w-[80px]" : "w-[272px]"}`}
             >
                 {/* Logo */}
-                <div className="h-[70px] flex items-center justify-between px-6 border-b border-border bg-[rgba(255,255,255,0.01)]">
+                <div className={`h-[70px] flex items-center border-b border-border bg-[rgba(255,255,255,0.01)] transition-all ${collapsed ? "justify-center px-0" : "justify-between px-6"}`}>
                     <Link href="/" className="flex items-center gap-2.5 no-underline">
                         <div
-                            className="w-7 h-7"
+                            className="w-7 h-7 shrink-0"
                             style={{
                                 background: "linear-gradient(135deg, #a3e635, #65a30d)",
                                 clipPath:
                                     "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)",
                             }}
                         />
-                        <span className="font-mono font-bold text-base text-text-primary tracking-tight">
-                            te<span className="text-lime">ther</span>
-                        </span>
+                        {!collapsed && (
+                            <span className="font-mono font-bold text-base text-text-primary tracking-tight">
+                                te<span className="text-lime">ther</span>
+                            </span>
+                        )}
                     </Link>
-                    <button
-                        onClick={() => setMobileOpen(false)}
-                        className="lg:hidden text-text-faint hover:text-text-primary cursor-pointer bg-transparent border-none"
-                    >
-                        <X size={18} />
-                    </button>
+                    {!collapsed && (
+                        <button
+                            onClick={() => setMobileOpen(false)}
+                            className="lg:hidden text-text-faint hover:text-text-primary cursor-pointer bg-transparent border-none"
+                        >
+                            <X size={18} />
+                        </button>
+                    )}
                 </div>
 
+                {/* Collapse Toggle */}
+                <button
+                    onClick={() => setCollapsed(!collapsed)}
+                    className="absolute -right-3 top-[23px] z-50 hidden lg:flex items-center justify-center w-6 h-6 rounded-full bg-[#161b22] border border-[#30363d] text-text-muted hover:text-text-primary hover:border-text-ghost transition-all shadow-sm cursor-pointer"
+                    title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+                >
+                    {collapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
+                </button>
+
                 {/* Nav */}
-                <nav className="flex-1 px-3 py-5 space-y-1.5 overflow-y-auto">
+                <nav className="flex-1 px-3 py-6 space-y-2 overflow-y-auto">
                     {NAV_ITEMS.map((item) => {
                         const isActive = pathname === item.href;
                         return (
@@ -104,13 +120,15 @@ export default function Sidebar({
                                 key={item.href}
                                 href={item.href}
                                 onClick={() => setMobileOpen(false)}
-                                className={`flex items-center gap-3 px-4 py-3 rounded-lg font-mono text-sm no-underline transition-all ${isActive
-                                    ? "bg-[rgba(163,230,53,0.08)] text-lime border border-[rgba(163,230,53,0.2)]"
-                                    : "text-text-muted hover:text-text-primary hover:bg-surface border border-transparent"
+                                title={collapsed ? item.label : undefined}
+                                className={`flex items-center px-4 py-3.5 rounded-lg font-mono text-sm no-underline transition-all ${collapsed ? "justify-center" : "gap-4"
+                                    } ${isActive
+                                        ? "bg-[rgba(163,230,53,0.08)] text-lime border border-[rgba(163,230,53,0.2)] shadow-sm"
+                                        : "text-text-muted hover:text-text-primary hover:bg-[rgba(255,255,255,0.03)] border border-transparent"
                                     }`}
                             >
-                                <item.icon size={18} />
-                                {item.label}
+                                <item.icon size={20} className="shrink-0" />
+                                {!collapsed && <span>{item.label}</span>}
                             </Link>
                         );
                     })}
@@ -118,25 +136,35 @@ export default function Sidebar({
 
                 {/* Bottom */}
                 <div className="px-3 py-5 border-t border-border">
-                    <div className="flex items-center gap-3 px-4 py-2.5 mb-2">
-                        <div className="w-9 h-9 rounded-full bg-[rgba(163,230,53,0.15)] flex items-center justify-center font-mono text-xs text-lime font-bold">
-                            {initials}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                            <div className="font-mono text-xs text-text-primary truncate">
-                                {userEmail}
+                    {!collapsed ? (
+                        <div className="flex items-center gap-3 px-4 py-3 mb-2">
+                            <div className="w-10 h-10 rounded-full bg-[rgba(163,230,53,0.15)] flex items-center justify-center font-mono text-sm text-lime font-bold shrink-0">
+                                {initials}
                             </div>
-                            <div className="font-mono text-[11px] text-text-ghost truncate">
-                                {companyName}
+                            <div className="flex-1 min-w-0">
+                                <div className="font-mono text-xs text-text-primary truncate">
+                                    {userEmail}
+                                </div>
+                                <div className="font-mono text-[11px] text-text-ghost truncate mt-0.5">
+                                    {companyName}
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    ) : (
+                        <div className="flex justify-center mb-4">
+                            <div className="w-10 h-10 rounded-full bg-[rgba(163,230,53,0.15)] flex items-center justify-center font-mono text-sm text-lime font-bold shrink-0" title={`${userEmail}\n${companyName}`}>
+                                {initials}
+                            </div>
+                        </div>
+                    )}
                     <button
                         onClick={handleLogout}
-                        className="w-full flex items-center gap-3 px-4 py-3 rounded-lg font-mono text-sm text-text-faint hover:text-red-stat hover:bg-[rgba(239,68,68,0.05)] transition-all cursor-pointer bg-transparent border-none"
+                        title={collapsed ? "Sign out" : undefined}
+                        className={`w-full flex items-center px-4 py-3.5 rounded-lg font-mono text-sm text-text-faint hover:text-red-stat hover:bg-[rgba(239,68,68,0.05)] transition-all cursor-pointer bg-transparent border-none ${collapsed ? "justify-center" : "gap-4"
+                            }`}
                     >
-                        <LogOut size={16} />
-                        Sign out
+                        <LogOut size={18} className="shrink-0" />
+                        {!collapsed && <span>Sign out</span>}
                     </button>
                 </div>
             </aside>

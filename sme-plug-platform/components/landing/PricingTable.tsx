@@ -5,8 +5,8 @@ import { PLANS } from "@/lib/data";
 
 export default function PricingTable() {
     return (
-        <section id="pricing" className="py-24 px-6 md:px-20 border-b border-border bg-[linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,0.02))]">
-            <div className="max-w-[1200px] mx-auto">
+        <section id="pricing" className="py-32 px-6 md:px-16 border-b border-border bg-[linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,0.02))]">
+            <div className="max-w-[1240px] mx-auto">
                 <div className="text-center mb-16">
                     <div className="ui-eyebrow text-lime mb-4">
                         PRICING
@@ -19,7 +19,7 @@ export default function PricingTable() {
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
                     {PLANS.map((plan, i) => (
                         <motion.div
                             key={i}
@@ -27,21 +27,23 @@ export default function PricingTable() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: i * 0.1 }}
-                            className={`rounded-lg p-8 relative flex flex-col h-full ${plan.highlight ? "md:-translate-y-1" : ""
+                            className={`rounded-xl p-10 relative flex flex-col h-full transition-transform duration-300 ${plan.highlight ? "md:-translate-y-2 hover:-translate-y-4 shadow-2xl" : "hover:-translate-y-1"
                                 }`}
                             style={{
                                 background: plan.highlight
-                                    ? "rgba(163,230,53,0.06)"
+                                    ? "rgba(163,230,53,0.04)"
                                     : "rgba(255,255,255,0.02)",
+                                backdropFilter: "blur(12px)",
+                                WebkitBackdropFilter: "blur(12px)",
                                 border: `1px solid ${plan.highlight
-                                        ? "rgba(163,230,53,0.3)"
-                                        : "rgba(255,255,255,0.06)"
+                                    ? "rgba(163,230,53,0.4)"
+                                    : "rgba(255,255,255,0.06)"
                                     }`,
                             }}
                         >
                             {/* Popular badge */}
                             {plan.highlight && (
-                                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-lime text-canvas font-mono text-[10px] font-bold px-3 py-1 tracking-[0.1em]">
+                                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-lime text-canvas font-mono text-[11px] font-bold px-4 py-1.5 rounded-sm tracking-[0.1em] shadow-[0_4px_12px_rgba(163,230,53,0.4)]">
                                     MOST POPULAR
                                 </div>
                             )}
@@ -52,13 +54,13 @@ export default function PricingTable() {
                             >
                                 {plan.name.toUpperCase()}
                             </div>
-                            <div className="font-display text-5xl font-bold text-text-primary leading-none mb-1">
+                            <div className="font-display text-[56px] font-bold text-text-primary leading-none mb-2">
                                 ${plan.price.toLocaleString()}
                             </div>
-                            <div className="font-mono text-xs text-text-faint mb-2">
+                            <div className="font-mono text-[13px] text-text-faint mb-3">
                                 /plug/month
                             </div>
-                            <div className="font-mono text-xs text-text-muted mb-6 pb-6 border-b border-border">
+                            <div className="font-mono text-[13px] text-text-muted mb-8 pb-8 border-b border-border">
                                 {plan.limit}
                             </div>
 
@@ -77,9 +79,9 @@ export default function PricingTable() {
                             </div>
 
                             <button
-                                className={`w-full font-mono text-[13px] py-3 cursor-pointer tracking-[0.06em] transition-all duration-200 mt-auto ${plan.highlight
-                                        ? "bg-lime border border-lime text-canvas font-bold hover:opacity-90"
-                                        : "bg-transparent border border-border-hover text-text-muted hover:border-[rgba(255,255,255,0.3)]"
+                                className={`w-full font-mono text-[14px] py-4 rounded cursor-pointer tracking-[0.06em] transition-all mt-auto ${plan.highlight
+                                    ? "bg-lime border border-lime text-canvas font-bold hover:opacity-90 shadow-[0_0_15px_rgba(163,230,53,0.2)]"
+                                    : "bg-transparent border border-border-hover text-text-muted hover:border-[rgba(255,255,255,0.4)] hover:text-text-primary"
                                     }`}
                             >
                                 {plan.cta.toUpperCase()} →

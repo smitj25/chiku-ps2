@@ -96,7 +96,7 @@ export default function ComparePage() {
     const activePlugin = PLUGINS.find((p) => p.id === plugId)!;
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-12">
             {/* ─── Header ────────────────────────────────────────────── */}
             <div className="page-header mb-0">
                 <div className="flex items-center gap-3 mb-3">
@@ -116,7 +116,7 @@ export default function ComparePage() {
             </div>
 
             {/* ─── Controls ──────────────────────────────────────────── */}
-            <div className="section-card p-6">
+            <div className="section-card p-8">
                 {/* Plugin selector */}
                 <div className="flex items-center gap-2 mb-5">
                     <span className="font-mono text-xs text-text-ghost tracking-widest mr-1">DOMAIN</span>
@@ -148,13 +148,13 @@ export default function ComparePage() {
                             onChange={(e) => setQuery(e.target.value)}
                             onKeyDown={(e) => e.key === 'Enter' && runComparison()}
                             placeholder="Ask a question to compare…"
-                            className="w-full px-5 py-3 pr-12 rounded-xl font-mono text-sm bg-canvas text-white placeholder-[rgba(255,255,255,0.2)] outline-none border border-border focus:border-[rgba(163,230,53,0.4)] transition-colors"
+                            className="w-full px-6 py-4 pr-12 rounded-xl font-mono text-sm bg-canvas text-white placeholder-[rgba(255,255,255,0.2)] outline-none border border-border focus:border-[rgba(163,230,53,0.4)] transition-colors"
                         />
                     </div>
                     <button
                         onClick={() => runComparison()}
                         disabled={loading || !query.trim()}
-                        className="flex items-center gap-2 px-7 py-3 rounded-xl font-mono text-sm font-bold transition-all cursor-pointer border-none disabled:opacity-40"
+                        className="flex items-center gap-2 px-8 py-4 rounded-xl font-mono text-sm font-bold transition-all cursor-pointer border-none disabled:opacity-40"
                         style={{ background: 'linear-gradient(135deg, #a3e635, #65a30d)', color: '#0a0a0e' }}
                     >
                         {loading ? (
@@ -194,7 +194,7 @@ export default function ComparePage() {
                         {[0, 1].map((i) => (
                             <div
                                 key={i}
-                                className="rounded-2xl p-7 animate-pulse bg-surface border border-border"
+                                className="rounded-2xl p-8 animate-pulse bg-surface border border-border"
                             >
                                 <div className="h-4 w-36 bg-canvas rounded mb-6" />
                                 <div className="space-y-3">
@@ -218,14 +218,14 @@ export default function ComparePage() {
                     >
                         {/* Verdict */}
                         <div
-                            className="rounded-2xl p-5 flex items-center gap-4"
+                            className="rounded-2xl p-6 flex items-center gap-5"
                             style={{
                                 background: result.verdict.sme_verified
                                     ? 'rgba(163,230,53,0.04)'
                                     : 'rgba(251,191,36,0.04)',
                                 border: `1.5px solid ${result.verdict.sme_verified
-                                        ? 'rgba(163,230,53,0.2)'
-                                        : 'rgba(251,191,36,0.2)'
+                                    ? 'rgba(163,230,53,0.2)'
+                                    : 'rgba(251,191,36,0.2)'
                                     }`,
                             }}
                         >
@@ -310,9 +310,9 @@ export default function ComparePage() {
                         key="empty"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className="rounded-2xl p-16 text-center bg-surface border border-border"
+                        className="section-card border-dashed p-20 text-center"
                     >
-                        <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[rgba(163,230,53,0.06)] border border-[rgba(163,230,53,0.15)] mb-5">
+                        <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[rgba(163,230,53,0.06)] border border-[rgba(163,230,53,0.15)] mb-6">
                             <Zap size={28} className="text-lime" />
                         </div>
                         <h3 className="font-display text-lg font-bold text-text-primary mb-2">
@@ -354,7 +354,7 @@ function ResponsePanel({
         <div className="rounded-2xl overflow-hidden bg-surface" style={{ border: `1.5px solid ${color}22` }}>
             {/* Header */}
             <div
-                className="px-5 py-4 flex items-center justify-between"
+                className="px-6 py-5 flex items-center justify-between"
                 style={{ background: `${color}08`, borderBottom: `1px solid ${color}15` }}
             >
                 <div className="min-w-0">
@@ -379,7 +379,7 @@ function ResponsePanel({
             </div>
 
             {/* Response body */}
-            <div className="px-5 py-5">
+            <div className="px-6 py-6">
                 <div className="font-mono text-[13px] text-[#c9d1d9] leading-[1.8] whitespace-pre-wrap">
                     {formatResponse(response, verified)}
                 </div>
@@ -387,8 +387,8 @@ function ResponsePanel({
 
             {/* Citations footer */}
             {citations.length > 0 && (
-                <div className="px-5 py-4" style={{ borderTop: `1px solid ${color}10` }}>
-                    <div className="flex items-center gap-2 mb-2.5">
+                <div className="px-6 py-5" style={{ borderTop: `1px solid ${color}10` }}>
+                    <div className="flex items-center gap-2 mb-3">
                         <FileText size={12} style={{ color }} />
                         <span className="font-mono text-[11px] font-bold" style={{ color }}>
                             {verified ? 'VERIFIED CITATIONS' : 'UNVERIFIED CITATIONS'}

@@ -172,7 +172,7 @@ export default function ConfiguratorPage({ params }: { params: Promise<{ plugId:
     };
 
     return (
-        <div className="space-y-8">
+        <div className="space-y-12">
             <div className="page-header flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                     <h1 className="ui-page-title text-3xl mb-2">
@@ -192,7 +192,7 @@ export default function ConfiguratorPage({ params }: { params: Promise<{ plugId:
             </div>
 
             {/* Tabs */}
-            <div className="section-card-subtle p-1 flex gap-1 overflow-x-auto">
+            <div className="section-card-subtle p-2 flex gap-2 overflow-x-auto">
                 {TABS.map((tab) => (
                     <button
                         key={tab.id}
@@ -218,9 +218,9 @@ export default function ConfiguratorPage({ params }: { params: Promise<{ plugId:
                 {/* ── PERSONA TAB ── */}
                 {activeTab === "persona" && (
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div className="space-y-6">
+                        <div className="space-y-8">
                             {/* System prompt */}
-                            <div className="bg-surface border border-border rounded-lg p-6">
+                            <div className="section-card p-8">
                                 <div className="font-mono text-[11px] text-text-faint tracking-[0.1em] mb-3">
                                     SYSTEM PERSONA
                                 </div>
@@ -233,15 +233,15 @@ export default function ConfiguratorPage({ params }: { params: Promise<{ plugId:
                             </div>
 
                             {/* Decision tree */}
-                            <div className="bg-surface border border-border rounded-lg p-6">
-                                <div className="font-mono text-[11px] text-text-faint tracking-[0.1em] mb-3">
+                            <div className="section-card p-8">
+                                <div className="font-mono text-[11px] text-text-faint tracking-[0.1em] mb-4">
                                     DECISION TREE STEPS
                                 </div>
                                 <div className="space-y-2 mb-4">
                                     {steps.map((step, i) => (
                                         <div
                                             key={i}
-                                            className="flex items-center gap-2 bg-canvas border border-border rounded-md px-3 py-2"
+                                            className="flex items-center gap-3 bg-canvas border border-border rounded-md px-4 py-3"
                                         >
                                             <GripVertical
                                                 size={12}
@@ -268,11 +268,11 @@ export default function ConfiguratorPage({ params }: { params: Promise<{ plugId:
                                         onChange={(e) => setNewStep(e.target.value)}
                                         onKeyDown={(e) => e.key === "Enter" && addStep()}
                                         placeholder="Add a new step..."
-                                        className="flex-1 bg-canvas border border-border rounded-md px-3 py-2 font-mono text-xs text-text-primary placeholder:text-text-ghost outline-none focus:border-lime"
+                                        className="flex-1 bg-canvas border border-border rounded-md px-4 py-3 font-mono text-xs text-text-primary placeholder:text-text-ghost outline-none focus:border-lime"
                                     />
                                     <button
                                         onClick={addStep}
-                                        className="bg-surface border border-border rounded-md px-3 py-2 text-text-muted hover:text-lime hover:border-lime transition-all cursor-pointer"
+                                        className="bg-surface border border-border rounded-md px-4 py-3 text-text-muted hover:text-lime hover:border-lime transition-all cursor-pointer"
                                     >
                                         <Plus size={14} />
                                     </button>
@@ -281,7 +281,7 @@ export default function ConfiguratorPage({ params }: { params: Promise<{ plugId:
                         </div>
 
                         {/* Preview */}
-                        <div className="bg-surface border border-border rounded-lg p-6">
+                        <div className="section-card p-8">
                             <div className="font-mono text-[11px] text-text-faint tracking-[0.1em] mb-3">
                                 FINAL SYSTEM PROMPT PREVIEW
                             </div>
@@ -308,9 +308,9 @@ export default function ConfiguratorPage({ params }: { params: Promise<{ plugId:
 
                 {/* ── KNOWLEDGE BASE TAB ── */}
                 {activeTab === "knowledge" && (
-                    <div className="space-y-6">
+                    <div className="space-y-8">
                         {/* Upload area */}
-                        <div className="bg-surface border-2 border-dashed border-border rounded-lg p-12 text-center hover:border-lime transition-colors cursor-pointer">
+                        <div className="bg-surface border-2 border-dashed border-border rounded-xl p-16 text-center hover:border-lime transition-colors cursor-pointer">
                             <Upload size={32} className="text-text-ghost mx-auto mb-3" />
                             <div className="font-mono text-sm text-text-muted mb-1">
                                 Drop PDF files here or click to upload
@@ -321,7 +321,7 @@ export default function ConfiguratorPage({ params }: { params: Promise<{ plugId:
                         </div>
 
                         {/* File list */}
-                        <div className="bg-surface border border-border rounded-lg p-6">
+                        <div className="section-card p-8">
                             <div className="flex justify-between items-center mb-4">
                                 <div className="font-mono text-[11px] text-text-faint tracking-[0.1em]">
                                     UPLOADED DOCUMENTS
@@ -334,7 +334,7 @@ export default function ConfiguratorPage({ params }: { params: Promise<{ plugId:
                                 {UPLOADED_DOCS.map((doc, i) => (
                                     <div
                                         key={i}
-                                        className="flex items-center gap-4 bg-canvas border border-border rounded-md px-4 py-3"
+                                        className="flex items-center gap-5 bg-canvas border border-border rounded-md px-5 py-4"
                                     >
                                         <div className="font-mono text-sm text-text-primary flex-1">
                                             {doc.name}
@@ -363,9 +363,9 @@ export default function ConfiguratorPage({ params }: { params: Promise<{ plugId:
                 {/* ── GUARDRAILS TAB ── */}
                 {activeTab === "guardrails" && (
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div className="space-y-6">
+                        <div className="space-y-8">
                             {/* Forbidden topics */}
-                            <div className="bg-surface border border-border rounded-lg p-6">
+                            <div className="section-card p-8">
                                 <div className="font-mono text-[11px] text-text-faint tracking-[0.1em] mb-3">
                                     FORBIDDEN TOPICS
                                 </div>
@@ -391,11 +391,11 @@ export default function ConfiguratorPage({ params }: { params: Promise<{ plugId:
                                         onChange={(e) => setNewTopic(e.target.value)}
                                         onKeyDown={(e) => e.key === "Enter" && addTopic()}
                                         placeholder="Add forbidden topic..."
-                                        className="flex-1 bg-canvas border border-border rounded-md px-3 py-2 font-mono text-xs text-text-primary placeholder:text-text-ghost outline-none focus:border-lime"
+                                        className="flex-1 bg-canvas border border-border rounded-md px-4 py-3 font-mono text-xs text-text-primary placeholder:text-text-ghost outline-none focus:border-lime"
                                     />
                                     <button
                                         onClick={addTopic}
-                                        className="bg-surface border border-border rounded-md px-3 py-2 text-text-muted hover:text-lime hover:border-lime transition-all cursor-pointer"
+                                        className="bg-surface border border-border rounded-md px-4 py-3 text-text-muted hover:text-lime hover:border-lime transition-all cursor-pointer"
                                     >
                                         <Plus size={14} />
                                     </button>
@@ -403,7 +403,7 @@ export default function ConfiguratorPage({ params }: { params: Promise<{ plugId:
                             </div>
 
                             {/* PII toggle */}
-                            <div className="bg-surface border border-border rounded-lg p-6">
+                            <div className="section-card p-8">
                                 <div className="font-mono text-[11px] text-text-faint tracking-[0.1em] mb-4">
                                     PII REDACTION
                                 </div>
@@ -431,7 +431,7 @@ export default function ConfiguratorPage({ params }: { params: Promise<{ plugId:
                         </div>
 
                         {/* Citation mode */}
-                        <div className="bg-surface border border-border rounded-lg p-6">
+                        <div className="section-card p-8">
                             <div className="font-mono text-[11px] text-text-faint tracking-[0.1em] mb-4">
                                 CITATION STRICTNESS
                             </div>
@@ -451,7 +451,7 @@ export default function ConfiguratorPage({ params }: { params: Promise<{ plugId:
                                     <button
                                         key={mode.value}
                                         onClick={() => setCitationMode(mode.value)}
-                                        className={`w-full text-left p-4 rounded-md transition-all cursor-pointer border ${citationMode === mode.value
+                                        className={`w-full text-left p-5 rounded-md transition-all cursor-pointer border ${citationMode === mode.value
                                             ? "bg-[rgba(163,230,53,0.05)] border-[rgba(163,230,53,0.3)]"
                                             : "bg-canvas border-border hover:border-border-hover"
                                             }`}
@@ -485,13 +485,13 @@ export default function ConfiguratorPage({ params }: { params: Promise<{ plugId:
 
                 {/* ── TEST PLAYGROUND TAB ── */}
                 {activeTab === "playground" && (
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                         {/* Chat */}
-                        <div className="lg:col-span-2 bg-surface border border-border rounded-lg flex flex-col h-[600px]">
-                            <div className="px-4 py-3 border-b border-border font-mono text-[11px] text-text-faint tracking-[0.1em]">
+                        <div className="lg:col-span-2 section-card flex flex-col h-[600px] overflow-hidden">
+                            <div className="px-6 py-4 border-b border-border font-mono text-[11px] text-text-faint tracking-[0.1em]">
                                 TEST PLAYGROUND
                             </div>
-                            <div className="flex-1 p-4 overflow-y-auto space-y-3">
+                            <div className="flex-1 p-6 overflow-y-auto space-y-4">
                                 {chatMessages.map((msg, i) => (
                                     <div
                                         key={i}
@@ -499,7 +499,7 @@ export default function ConfiguratorPage({ params }: { params: Promise<{ plugId:
                                             }`}
                                     >
                                         <div
-                                            className={`max-w-[85%] rounded-lg px-4 py-3 font-mono text-xs leading-[1.7] ${msg.role === "user"
+                                            className={`max-w-[85%] rounded-lg px-5 py-4 font-mono text-xs leading-[1.7] ${msg.role === "user"
                                                 ? "bg-[rgba(163,230,53,0.1)] border border-[rgba(163,230,53,0.2)] text-text-primary"
                                                 : msg.role === "system"
                                                     ? "bg-canvas border border-border text-text-ghost text-[11px]"
@@ -511,17 +511,17 @@ export default function ConfiguratorPage({ params }: { params: Promise<{ plugId:
                                     </div>
                                 ))}
                             </div>
-                            <div className="p-4 border-t border-border flex gap-2">
+                            <div className="p-6 border-t border-border flex gap-3">
                                 <input
                                     value={chatInput}
                                     onChange={(e) => setChatInput(e.target.value)}
                                     onKeyDown={(e) => e.key === "Enter" && sendMessage()}
                                     placeholder="Test a query..."
-                                    className="w-full bg-canvas border border-border rounded-md px-3 py-2 font-mono text-sm text-text-primary placeholder:text-text-ghost outline-none focus:border-lime"
+                                    className="w-full bg-canvas border border-border rounded-md px-4 py-3 font-mono text-sm text-text-primary placeholder:text-text-ghost outline-none focus:border-lime"
                                 />
                                 <button
                                     onClick={sendMessage}
-                                    className="bg-lime text-canvas rounded-md px-3 py-2 hover:opacity-90 transition-opacity cursor-pointer border-none"
+                                    className="bg-lime text-canvas rounded-md px-4 py-3 hover:opacity-90 transition-opacity cursor-pointer border-none"
                                 >
                                     <Send size={14} />
                                 </button>
@@ -529,8 +529,8 @@ export default function ConfiguratorPage({ params }: { params: Promise<{ plugId:
                         </div>
 
                         {/* Info panel */}
-                        <div className="space-y-4">
-                            <div className="bg-surface border border-border rounded-lg p-4">
+                        <div className="space-y-6">
+                            <div className="section-card p-6">
                                 <div className="font-mono text-[10px] text-text-faint tracking-[0.1em] mb-3">
                                     ACTIVE GUARDRAILS
                                 </div>
@@ -556,7 +556,7 @@ export default function ConfiguratorPage({ params }: { params: Promise<{ plugId:
                                 </div>
                             </div>
 
-                            <div className="bg-surface border border-border rounded-lg p-4">
+                            <div className="section-card p-6">
                                 <div className="font-mono text-[10px] text-text-faint tracking-[0.1em] mb-3">
                                     RETRIEVED CHUNKS
                                 </div>
@@ -580,7 +580,7 @@ export default function ConfiguratorPage({ params }: { params: Promise<{ plugId:
                                     ].map((chunk, i) => (
                                         <div
                                             key={i}
-                                            className="bg-canvas border border-border rounded-md p-2.5"
+                                            className="bg-canvas border border-border rounded-md p-4"
                                         >
                                             <div className="font-mono text-[11px] text-text-primary">
                                                 {chunk.doc}

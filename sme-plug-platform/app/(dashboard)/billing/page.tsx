@@ -40,7 +40,7 @@ export default function BillingPage() {
     const healthCalls = usage?.per_plugin?.["healthcare"] ?? 0;
 
     return (
-        <div className="space-y-10">
+        <div className="space-y-12">
             <div className="page-header">
                 <h1 className="ui-page-title text-4xl mb-3">Billing</h1>
                 <p className="ui-page-subtitle">Your plan, usage, and invoices</p>
@@ -48,7 +48,7 @@ export default function BillingPage() {
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Current plan */}
-                <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="bg-[rgba(163,230,53,0.04)] border border-[rgba(163,230,53,0.2)] rounded-xl p-7 lg:col-span-1">
+                <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="section-card bg-[rgba(163,230,53,0.04)] p-8 lg:col-span-1">
                     <div className="font-mono text-xs text-lime tracking-[0.12em] font-medium mb-4">CURRENT PLAN</div>
                     <div className="font-display text-4xl font-bold text-text-primary mb-2">Starter</div>
                     <div className="font-mono text-sm text-text-muted mb-5">$500 / plug / month</div>
@@ -60,14 +60,14 @@ export default function BillingPage() {
                             </div>
                         ))}
                     </div>
-                    <button className="w-full flex items-center justify-center gap-2 bg-lime text-canvas font-mono font-bold text-sm py-3 rounded-lg hover:opacity-90 transition-opacity cursor-pointer border-none">
+                    <button className="w-full flex items-center justify-center gap-2 bg-lime text-canvas font-mono font-bold text-sm py-4 rounded-lg hover:opacity-90 transition-opacity cursor-pointer border-none">
                         <ArrowUpRight size={16} /> UPGRADE PLAN
                     </button>
                 </motion.div>
 
                 {/* Usage + cost */}
                 <div className="lg:col-span-2 space-y-8">
-                    <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="bg-surface border border-border rounded-xl p-7">
+                    <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="section-card p-8">
                         <div className="font-mono text-xs text-text-faint tracking-[0.12em] font-medium mb-5">API USAGE THIS MONTH</div>
                         <div className="flex justify-between items-end mb-4">
                             <div className="font-display text-5xl font-bold text-text-primary">{totalCalls.toLocaleString()}</div>
@@ -87,18 +87,18 @@ export default function BillingPage() {
                         </div>
                     </motion.div>
 
-                    <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="bg-surface border border-border rounded-xl p-7">
+                    <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="section-card p-8">
                         <div className="font-mono text-xs text-text-faint tracking-[0.12em] font-medium mb-5">COST BREAKDOWN</div>
                         <div className="space-y-4">
                             {[
                                 { name: "Legal SME", cost: "$500", calls: legalCalls },
                                 { name: "Healthcare SME", cost: "$500", calls: healthCalls },
                             ].map((p, i) => (
-                                <div key={i} className="flex items-center justify-between bg-canvas border border-border rounded-lg px-5 py-4">
+                                <div key={i} className="flex items-center justify-between bg-canvas border border-border rounded-xl px-6 py-5">
                                     <div className="font-mono text-sm text-text-primary font-medium">{p.name}</div>
                                     <div className="text-right">
                                         <div className="font-mono text-sm font-bold text-text-primary">{p.cost}<span className="text-text-ghost font-normal">/mo</span></div>
-                                        <div className="font-mono text-xs text-text-ghost mt-0.5">{p.calls.toLocaleString()} calls</div>
+                                        <div className="font-mono text-xs text-text-ghost mt-1">{p.calls.toLocaleString()} calls</div>
                                     </div>
                                 </div>
                             ))}
@@ -112,21 +112,21 @@ export default function BillingPage() {
             </div>
 
             {/* Invoices */}
-            <div className="bg-surface border border-border rounded-xl overflow-hidden">
-                <div className="px-5 py-4 border-b border-border flex items-center gap-2.5">
-                    <CreditCard size={16} className="text-text-ghost" />
+            <div className="section-card overflow-hidden">
+                <div className="px-6 py-5 border-b border-border flex items-center gap-3">
+                    <CreditCard size={18} className="text-text-ghost" />
                     <span className="font-mono text-xs text-text-faint tracking-[0.12em] font-medium">INVOICE HISTORY</span>
                 </div>
                 <table className="w-full">
                     <thead><tr className="border-b border-border">
-                        {["Invoice", "Date", "Amount", "Status"].map(h => (<th key={h} className="text-left font-mono text-xs text-text-ghost tracking-[0.1em] px-5 py-4">{h}</th>))}
+                        {["Invoice", "Date", "Amount", "Status"].map(h => (<th key={h} className="text-left font-mono text-xs text-text-ghost tracking-[0.1em] px-6 py-5">{h}</th>))}
                     </tr></thead>
                     <tbody>{INVOICES.map((inv) => (
                         <tr key={inv.id} className="border-b border-border last:border-b-0 hover:bg-surface-hover transition-colors">
-                            <td className="px-5 py-4 font-mono text-sm text-text-primary">{inv.id}</td>
-                            <td className="px-5 py-4 font-mono text-sm text-text-ghost">{inv.date}</td>
-                            <td className="px-5 py-4 font-mono text-sm text-text-primary font-bold">{inv.amount}</td>
-                            <td className="px-5 py-4"><span className="font-mono text-xs bg-[rgba(52,211,153,0.1)] text-plug-healthcare border border-[rgba(52,211,153,0.3)] px-2.5 py-1 rounded">{inv.status.toUpperCase()}</span></td>
+                            <td className="px-6 py-5 font-mono text-sm text-text-primary">{inv.id}</td>
+                            <td className="px-6 py-5 font-mono text-sm text-text-ghost">{inv.date}</td>
+                            <td className="px-6 py-5 font-mono text-sm text-text-primary font-bold">{inv.amount}</td>
+                            <td className="px-6 py-5"><span className="font-mono text-xs bg-[rgba(52,211,153,0.1)] text-plug-healthcare border border-[rgba(52,211,153,0.3)] px-3 py-1.5 rounded">{inv.status.toUpperCase()}</span></td>
                         </tr>
                     ))}</tbody>
                 </table>

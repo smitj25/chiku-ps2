@@ -66,7 +66,7 @@ export default function ApiKeysPage() {
     };
 
     return (
-        <div className="space-y-8">
+        <div className="space-y-12">
             {/* HEADER */}
             <div className="page-header flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
@@ -85,8 +85,8 @@ export default function ApiKeysPage() {
             </div>
 
             {/* USAGE CALLOUT */}
-            <div className="bg-[rgba(163,230,53,0.04)] border border-[rgba(163,230,53,0.15)] p-4 rounded-md">
-                <div className="font-mono text-xs font-bold text-lime tracking-[0.06em] mb-1">USING YOUR KEY IN VS CODE</div>
+            <div className="bg-[rgba(163,230,53,0.04)] border border-[rgba(163,230,53,0.15)] p-6 rounded-lg">
+                <div className="font-mono text-xs font-bold text-lime tracking-[0.06em] mb-2">USING YOUR KEY IN VS CODE</div>
                 <div className="font-mono text-[11px] text-[rgba(163,230,53,0.6)] leading-relaxed">
                     1. Install the SME-Plug extension &nbsp;·&nbsp;
                     2. Open Settings → SME-Plug → apiKey &nbsp;·&nbsp;
@@ -99,8 +99,8 @@ export default function ApiKeysPage() {
             {loading ? (
                 <div className="text-text-ghost font-mono text-sm py-10">Loading keys...</div>
             ) : keys.length === 0 ? (
-                <div className="border border-dashed border-border p-16 text-center rounded-lg">
-                    <Key size={32} className="mx-auto mb-4 text-text-ghost opacity-40" />
+                <div className="section-card border-dashed p-20 text-center">
+                    <Key size={32} className="mx-auto mb-5 text-text-ghost opacity-40" />
                     <div className="font-mono text-sm text-text-ghost mb-2">No API keys yet</div>
                     <div className="font-mono text-xs text-text-ghost">Generate a key to start using SME-Plug in your IDE</div>
                 </div>
@@ -110,7 +110,7 @@ export default function ApiKeysPage() {
                         <thead>
                             <tr className="border-b border-border">
                                 {["Name / Key", "Plugin", "Created", "Last Used", "Status", ""].map(h => (
-                                    <th key={h} className="text-left font-mono text-[10px] text-text-ghost tracking-[0.1em] px-4 py-3">{h}</th>
+                                    <th key={h} className="text-left font-mono text-[10px] text-text-ghost tracking-[0.1em] px-6 py-4">{h}</th>
                                 ))}
                             </tr>
                         </thead>
@@ -123,14 +123,14 @@ export default function ApiKeysPage() {
                                     transition={{ delay: i * 0.03 }}
                                     className={`border-b border-border last:border-b-0 hover:bg-surface-hover transition-colors ${key.revokedAt ? "opacity-40" : ""}`}
                                 >
-                                    <td className="px-4 py-3">
-                                        <div className="font-mono text-xs text-text-primary">{key.name}</div>
+                                    <td className="px-6 py-4">
+                                        <div className="font-mono text-xs text-text-primary mb-1">{key.name}</div>
                                         <div className="font-mono text-[11px] text-text-ghost tracking-[0.05em]">{key.prefix}</div>
                                     </td>
 
-                                    <td className="px-4 py-3">
+                                    <td className="px-6 py-4">
                                         <span
-                                            className="font-mono text-[11px] px-2 py-0.5 rounded-[3px] border"
+                                            className="font-mono text-[11px] px-2.5 py-1 rounded-[4px] border"
                                             style={{
                                                 background: `${PLUG_COLORS[key.pluginId] || "#888"}18`,
                                                 borderColor: `${PLUG_COLORS[key.pluginId] || "#888"}40`,
@@ -141,32 +141,32 @@ export default function ApiKeysPage() {
                                         </span>
                                     </td>
 
-                                    <td className="px-4 py-3 font-mono text-[11px] text-text-ghost">
+                                    <td className="px-6 py-4 font-mono text-[11px] text-text-ghost">
                                         {new Date(key.createdAt).toLocaleDateString("en-US", {
                                             month: "short", day: "numeric", year: "numeric"
                                         })}
                                     </td>
 
-                                    <td className="px-4 py-3 font-mono text-[11px] text-text-ghost">
+                                    <td className="px-6 py-4 font-mono text-[11px] text-text-ghost">
                                         {key.lastUsed
                                             ? new Date(key.lastUsed).toLocaleDateString("en-US", { month: "short", day: "numeric" })
                                             : "Never"}
                                     </td>
 
-                                    <td className="px-4 py-3">
-                                        <span className={`font-mono text-[10px] px-2 py-0.5 rounded-[3px] border ${key.revokedAt
-                                                ? "bg-[rgba(239,68,68,0.08)] text-red-stat border-[rgba(239,68,68,0.25)]"
-                                                : "bg-[rgba(163,230,53,0.06)] text-lime border-[rgba(163,230,53,0.25)]"
+                                    <td className="px-6 py-4">
+                                        <span className={`font-mono text-[10px] px-2.5 py-1 rounded-[4px] border ${key.revokedAt
+                                            ? "bg-[rgba(239,68,68,0.08)] text-red-stat border-[rgba(239,68,68,0.25)]"
+                                            : "bg-[rgba(163,230,53,0.06)] text-lime border-[rgba(163,230,53,0.25)]"
                                             }`}>
                                             {key.revokedAt ? "REVOKED" : "● ACTIVE"}
                                         </span>
                                     </td>
 
-                                    <td className="px-4 py-3">
+                                    <td className="px-6 py-4">
                                         {!key.revokedAt && (
                                             <button
                                                 onClick={() => handleRevoke(key.id)}
-                                                className="text-text-ghost hover:text-red-stat cursor-pointer bg-transparent border-none transition-colors"
+                                                className="text-text-ghost hover:text-red-stat cursor-pointer bg-transparent border-none transition-colors p-2"
                                             >
                                                 <Trash2 size={12} />
                                             </button>
@@ -236,12 +236,12 @@ function GenerateKeyModal({
             <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="bg-canvas border border-border rounded-lg w-full max-w-md p-6"
+                className="section-card w-full max-w-lg p-8"
             >
-                <h2 className="font-display text-xl font-bold text-text-primary mb-1">
+                <h2 className="font-display text-2xl font-bold text-text-primary mb-2">
                     {newKey ? "🔑 Copy Your Key" : "Generate API Key"}
                 </h2>
-                <p className="font-mono text-[11px] text-text-ghost mb-6">
+                <p className="font-mono text-[11px] text-text-ghost mb-8">
                     {newKey
                         ? "This key is shown ONCE. Store it somewhere safe — you cannot retrieve it again."
                         : "Scoped to one plugin. Name it by environment or use case."}
@@ -249,31 +249,30 @@ function GenerateKeyModal({
 
                 {!newKey ? (
                     <>
-                        {/* NAME INPUT */}
-                        <div className="mb-4">
-                            <label className="block font-mono text-[10px] text-text-faint tracking-[0.1em] mb-2">KEY NAME</label>
+                        <div className="mb-6">
+                            <label className="block font-mono text-[10px] text-text-faint tracking-[0.1em] mb-3">KEY NAME</label>
                             <input
                                 value={name}
                                 onChange={e => setName(e.target.value)}
                                 onKeyDown={e => e.key === "Enter" && handleGenerate()}
                                 placeholder="e.g. Production — VS Code, Dev Testing"
                                 autoFocus
-                                className={`w-full bg-surface border rounded-md px-3 py-2.5 font-mono text-sm text-text-primary placeholder:text-text-ghost outline-none focus:border-lime ${error ? "border-red-stat" : "border-border"}`}
+                                className={`w-full bg-surface border rounded-md px-4 py-3 font-mono text-sm text-text-primary placeholder:text-text-ghost outline-none focus:border-lime ${error ? "border-red-stat" : "border-border"}`}
                             />
-                            {error && <div className="font-mono text-[11px] text-red-stat mt-1">{error}</div>}
+                            {error && <div className="font-mono text-[11px] text-red-stat mt-2">{error}</div>}
                         </div>
 
                         {/* PLUGIN SELECTOR */}
-                        <div className="mb-7">
-                            <label className="block font-mono text-[10px] text-text-faint tracking-[0.1em] mb-2">PLUGIN</label>
-                            <div className="flex gap-2">
+                        <div className="mb-8">
+                            <label className="block font-mono text-[10px] text-text-faint tracking-[0.1em] mb-3">PLUGIN</label>
+                            <div className="flex gap-3">
                                 {(["engineering", "legal", "healthcare"] as const).map(id => (
                                     <button
                                         key={id}
                                         onClick={() => setPluginId(id)}
-                                        className={`flex-1 font-mono text-xs py-2.5 cursor-pointer border transition-all rounded-md uppercase tracking-[0.05em] ${pluginId === id
-                                                ? "bg-[rgba(163,230,53,0.08)] border-lime text-lime"
-                                                : "bg-surface border-border text-text-muted"
+                                        className={`flex-1 font-mono text-xs py-3 cursor-pointer border transition-all rounded-md uppercase tracking-[0.05em] ${pluginId === id
+                                            ? "bg-[rgba(163,230,53,0.08)] border-lime text-lime"
+                                            : "bg-surface border-border text-text-muted"
                                             }`}
                                         style={pluginId === id ? {
                                             borderColor: PLUG_COLORS[id],
@@ -287,18 +286,17 @@ function GenerateKeyModal({
                             </div>
                         </div>
 
-                        {/* ACTIONS */}
-                        <div className="flex gap-3">
+                        <div className="flex gap-4">
                             <button
                                 onClick={handleGenerate}
                                 disabled={genLoading}
-                                className="flex-1 bg-lime text-canvas font-mono font-bold text-xs rounded-md py-2.5 hover:opacity-90 disabled:opacity-50 cursor-pointer border-none tracking-[0.06em]"
+                                className="flex-1 bg-lime text-canvas font-mono font-bold text-xs rounded-md py-3 hover:opacity-90 disabled:opacity-50 cursor-pointer border-none tracking-[0.06em]"
                             >
                                 {genLoading ? "GENERATING..." : "GENERATE KEY →"}
                             </button>
                             <button
                                 onClick={onClose}
-                                className="flex-1 font-mono text-xs text-text-muted border border-border rounded-md py-2.5 cursor-pointer bg-transparent hover:border-border-hover"
+                                className="flex-1 font-mono text-xs text-text-muted border border-border rounded-md py-3 cursor-pointer bg-transparent hover:border-border-hover hover:bg-surface"
                             >
                                 CANCEL
                             </button>
@@ -307,20 +305,20 @@ function GenerateKeyModal({
                 ) : (
                     /* SHOW KEY ONCE */
                     <>
-                        <div className="bg-surface border border-[rgba(163,230,53,0.3)] rounded-md p-4 font-mono text-xs text-lime tracking-[0.04em] break-all leading-relaxed mb-3">
+                        <div className="bg-surface border border-[rgba(163,230,53,0.3)] rounded-lg p-6 font-mono text-sm text-lime tracking-[0.04em] break-all leading-relaxed mb-4 text-center cursor-all-scroll select-all">
                             {newKey}
                         </div>
 
-                        <div className="bg-[rgba(239,68,68,0.06)] border border-[rgba(239,68,68,0.2)] rounded-md p-3 font-mono text-[11px] text-red-stat mb-5 leading-relaxed">
+                        <div className="bg-[rgba(239,68,68,0.06)] border border-[rgba(239,68,68,0.2)] rounded-lg p-4 font-mono text-[11px] text-red-stat mb-8 leading-relaxed">
                             ⚠ This key will NOT be shown again. Copy it now and store it in a password manager or your VS Code settings.
                         </div>
 
-                        <div className="flex gap-3">
+                        <div className="flex gap-4">
                             <button
                                 onClick={onCopy}
-                                className={`flex-1 flex items-center justify-center gap-2 font-mono font-bold text-xs rounded-md py-2.5 cursor-pointer border-none tracking-[0.06em] transition-all ${copied
-                                        ? "bg-[rgba(163,230,53,0.15)] text-lime border border-[rgba(163,230,53,0.4)]"
-                                        : "bg-lime text-canvas"
+                                className={`flex-1 flex items-center justify-center gap-2 font-mono font-bold text-xs rounded-md py-3 cursor-pointer border-none tracking-[0.06em] transition-all ${copied
+                                    ? "bg-[rgba(163,230,53,0.15)] text-lime border border-[rgba(163,230,53,0.4)]"
+                                    : "bg-lime text-canvas"
                                     }`}
                             >
                                 {copied ? <Check size={14} /> : <Copy size={14} />}
@@ -328,7 +326,7 @@ function GenerateKeyModal({
                             </button>
                             <button
                                 onClick={onClose}
-                                className="flex-1 font-mono text-xs text-text-muted border border-border rounded-md py-2.5 cursor-pointer bg-transparent"
+                                className="flex-1 font-mono text-xs text-text-muted border border-border rounded-md py-3 cursor-pointer bg-transparent hover:bg-surface"
                             >
                                 DONE
                             </button>
