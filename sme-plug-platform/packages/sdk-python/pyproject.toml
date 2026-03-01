@@ -3,14 +3,14 @@ requires = ["setuptools>=68.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "smeplug"
+name = "tether"
 version = "0.1.0"
-description = "Official Python SDK for SME-Plug — AI expert plugins with verified citations"
+description = "Official Python SDK for Tether — AI expert plugins with verified citations"
 readme = "README.md"
 license = {text = "MIT"}
 requires-python = ">=3.9"
 authors = [
-    {name = "SME-Plug", email = "hello@smeplug.dev"},
+    {name = "Tether", email = "hello@tether.dev"},
 ]
 keywords = ["ai", "sme", "rag", "citations", "legal", "healthcare", "engineering"]
 classifiers = [
@@ -30,9 +30,9 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://smeplug.dev"
-Documentation = "https://smeplug.dev/docs"
-Repository = "https://github.com/smeplug/sdk-python"
+Homepage = "https://tether.dev"
+Documentation = "https://tether.dev/docs"
+Repository = "https://github.com/tether/sdk-python"
 
 [tool.setuptools.packages.find]
-include = ["smeplug*"]
+include = ["tether*"]

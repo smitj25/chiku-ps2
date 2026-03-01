@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "SME-Plug | The AI Expert That Cites Its Sources",
+  title: "Tether | The AI Expert That Cites Its Sources",
   description:
     "Hot-swappable AI expert plugins for enterprise. Legal, Healthcare, Engineering. Every claim verified. Every fact cited. Zero hallucinations.",
   keywords: [
@@ -10,14 +10,16 @@ export const metadata: Metadata = {
     "enterprise AI",
     "RAG",
     "hallucination-free",
-    "SME",
     "developer tools",
   ],
   openGraph: {
-    title: "SME-Plug | The AI Expert That Cites Its Sources",
+    title: "Tether | The AI Expert That Cites Its Sources",
     description:
       "Hot-swappable AI expert plugins for enterprise. Zero hallucinations.",
     type: "website",
+  },
+  icons: {
+    icon: "/tether-icon.svg?v=3",
   },
 };
 

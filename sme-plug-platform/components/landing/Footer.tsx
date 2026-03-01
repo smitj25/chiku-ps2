@@ -1,6 +1,8 @@
 import Link from "next/link";
 
 export default function Footer() {
+    const year = new Date().getFullYear();
+
     return (
         <footer className="border-t border-border px-6 md:px-20 py-10 flex flex-col md:flex-row justify-between items-center gap-4">
             {/* Logo */}
@@ -14,26 +16,32 @@ export default function Footer() {
                     }}
                 />
                 <span className="font-mono text-sm font-bold text-text-primary">
-                    sme<span className="text-lime">plug</span>
+                    te<span className="text-lime">ther</span>
                 </span>
             </Link>
 
             {/* Links */}
             <div className="flex gap-6 flex-wrap justify-center">
-                {["Docs", "Pricing", "Marketplace", "Privacy", "Terms"].map((item) => (
-                    <a
-                        key={item}
-                        href="#"
+                {[
+                    { label: "Docs", href: "/docs" },
+                    { label: "Pricing", href: "/pricing" },
+                    { label: "Marketplace", href: "/#marketplace" },
+                    { label: "Login", href: "/login" },
+                    { label: "Get Started", href: "/register" },
+                ].map((item) => (
+                    <Link
+                        key={item.label}
+                        href={item.href}
                         className="font-mono text-xs text-text-faint tracking-[0.05em] no-underline hover:text-text-muted transition-colors"
                     >
-                        {item}
-                    </a>
+                        {item.label}
+                    </Link>
                 ))}
             </div>
 
             {/* Copyright */}
             <div className="font-mono text-[11px] text-text-ghost">
-                © 2025 SME-Plug Inc. All rights reserved.
+                © {year} Tether Inc. All rights reserved.
             </div>
         </footer>
     );

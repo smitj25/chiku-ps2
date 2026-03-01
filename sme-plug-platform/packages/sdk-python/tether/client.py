@@ -1,4 +1,4 @@
-"""SME-Plug Python client."""
+"""Tether Python client."""
 
 from __future__ import annotations
 
@@ -7,22 +7,22 @@ from typing import Optional
 
 import httpx
 
-from .models import ChatResponse, Citation, EvalResponse, SMEPlugError, UploadResponse
+from .models import ChatResponse, Citation, EvalResponse, TetherError, UploadResponse
 
 
-class SMEPlug:
+class Tether:
     """
-    Official Python client for SME-Plug.
+    Official Python client for Tether.
 
     Args:
-        api_key: Your SME-Plug API key (sme_live_xxx or sme_test_xxx).
+        api_key: Your Tether API key (tether_live_xxx or tether_test_xxx).
         plugin_id: Plugin to use (e.g. 'legal-v1', 'healthcare-v1').
-        base_url: API base URL (default: https://api.smeplug.dev).
+        base_url: API base URL (default: https://api.tether.dev).
         timeout: Request timeout in seconds (default: 30).
 
     Example:
-        >>> from smeplug import SMEPlug
-        >>> plug = SMEPlug(api_key="sme_live_xxx", plugin_id="legal-v1")
+        >>> from tether import Tether
+        >>> plug = Tether(api_key="tether_live_xxx", plugin_id="legal-v1")
         >>> response = plug.chat("What are the GDPR penalties?")
         >>> print(response.text)
         >>> print(response.citations)
@@ -32,7 +32,7 @@ class SMEPlug:
         self,
         api_key: str,
         plugin_id: str,
-        base_url: str = "https://api.smeplug.dev",
+        base_url: str = "https://api.tether.dev",
         timeout: float = 30.0,
     ):
         if not api_key:
@@ -65,7 +65,7 @@ class SMEPlug:
             ChatResponse with text, citations, verified flag, and RAGAS score.
 
         Raises:
-            SMEPlugError: If the API returns an error.
+            TetherError: If the API returns an error.
 
         Example:
             >>> res = plug.chat("Analyze clause 4.2 for liability.")
@@ -155,20 +155,20 @@ class SMEPlug:
             return
 
         if response.status_code == 401:
-            raise SMEPlugError(
-                "Invalid API key. Check your key at smeplug.dev/api-keys",
+            raise TetherError(
+                "Invalid API key. Check your key at tether.dev/api-keys",
                 code="INVALID_KEY",
                 status=401,
             )
         if response.status_code == 429:
-            raise SMEPlugError(
-                "Rate limit exceeded. Upgrade your plan at smeplug.dev/billing",
+            raise TetherError(
+                "Rate limit exceeded. Upgrade your plan at tether.dev/billing",
                 code="RATE_LIMITED",
                 status=429,
             )
 
         body = response.text
-        raise SMEPlugError(
+        raise TetherError(
             f"API error {response.status_code}: {body}",
             code="API_ERROR",
             status=response.status_code,
@@ -185,4 +185,4 @@ class SMEPlug:
         self.close()
 
     def __repr__(self) -> str:
-        return f"SMEPlug(plugin_id={self._plugin_id!r})"
+        return f"Tether(plugin_id={self._plugin_id!r})"

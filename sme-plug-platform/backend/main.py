@@ -22,9 +22,9 @@ load_dotenv()
 app = FastAPI(title="SME-Plug API", version="1.0.0")
 groq_client = Groq(api_key=os.environ.get("GROQ_API_KEY", ""))
 
-# ── USAGE TRACKING (in-memory — survives reloads via file persistence) ────────
-# Tracks { api_key: [ { timestamp, plug_id, mode } ] }
-USAGE_LOG: dict[str, list[dict]] = defaultdict(list)
+# ── LOGGING IMPORTS ────────────────────────────────────────────────────────────
+import time
+from backend.db import log_api_call, log_document, get_api_usage, get_plugin_config
 
 # ── CORS ──────────────────────────────────────────────────────────────────────
 app.add_middleware(
@@ -40,6 +40,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+from backend.integrations.sap_routes import sap_router
+app.include_router(sap_router, prefix="/integrations")
 
 # ── SME PERSONAS ──────────────────────────────────────────────────────────────
 SME_PERSONAS = {
@@ -101,6 +104,8 @@ class ChatRequest(BaseModel):
     plug_id:    str = "legal"
     mode:       str = "sme"       # "sme" or "baseline"
     session_id: Optional[str] = None
+    use_sap:    bool = False
+    sap_tenant_id: str = "buildco"
 
 class ChatResponse(BaseModel):
     response:        str
@@ -162,12 +167,8 @@ async def chat(
     if x_api_key != dev_key and not x_api_key:
         raise HTTPException(401, "API key required. Pass x-api-key header.")
 
-    # Log this API call
-    USAGE_LOG[x_api_key or dev_key].append({
-        "timestamp": datetime.now(timezone.utc).isoformat(),
-        "plug_id":   request.plug_id,
-        "mode":      request.mode,
-    })
+    # Track start time for latency
+    start_time = time.time()
 
     # 2. Input guardrail
     if check_guardrails(request.message):
@@ -185,6 +186,37 @@ async def chat(
     # 3. Build system prompt based on mode
     if request.mode == "sme":
         system = SME_PERSONAS.get(request.plug_id, SME_PERSONAS["legal"])
+        
+        # Check custom config
+        custom_config = get_plugin_config(x_api_key or dev_key, request.plug_id)
+        if custom_config:
+            import json
+            persona = custom_config.get("persona")
+            if persona:
+                system = persona
+                
+            dt_str = custom_config.get("decisionTree")
+            if dt_str:
+                try:
+                    decisionTree = json.loads(dt_str)
+                    if isinstance(decisionTree, list) and len(decisionTree) > 0:
+                        system += "\n\nDECISION TREE STEPS:\n"
+                        for i, step in enumerate(decisionTree):
+                            system += f"{i+1}. {step}\n"
+                except Exception:
+                    pass
+                    
+            gr_str = custom_config.get("guardrails")
+            if gr_str:
+                try:
+                    guardrails = json.loads(gr_str)
+                    if isinstance(guardrails, dict):
+                        topics = guardrails.get("forbiddenTopics", [])
+                        if topics:
+                            system += "\n\nCRITICAL GUARDRAILS:\nYou MUST NOT discuss the following topics under any circumstances:\n- " + "\n- ".join(topics)
+                except Exception:
+                    pass
+
         # ── RAG: retrieve real document chunks ────────────────────────
         chunks = retrieve(request.message, request.plug_id, top_k=5)
         context = format_context(chunks)
@@ -194,6 +226,11 @@ async def chat(
     else:
         # Baseline — plain LLM with no guidance. Will hallucinate.
         system = "You are a helpful assistant. Answer the user's question."
+
+    if request.use_sap:
+        from backend.integrations.sap_mock import build_sap_context
+        sap_ctx = build_sap_context(request.sap_tenant_id)
+        system += f"\n\n{sap_ctx}"
 
     # 4. Call Groq (using llama or mixtral)
     model = os.environ.get("GROQ_MODEL", "llama-3.3-70b-versatile")
@@ -220,6 +257,17 @@ async def chat(
             "Please upload relevant documents to your SME-Plug knowledge base "
             "and re-ask your question."
         )
+
+    
+    # Log api call (sync, fire-and-forget for now)
+    latency_ms = int((time.time() - start_time) * 1000)
+    log_api_call(
+        api_key=x_api_key or dev_key,
+        plug_id=request.plug_id,
+        endpoint="/chat",
+        status=200,
+        latency_ms=latency_ms
+    )
 
     return ChatResponse(
         response=reply,
@@ -373,22 +421,7 @@ async def get_usage(
         api_key = x_api_key
 
     now = datetime.now(timezone.utc)
-    month_start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-
-    # Count all calls across all keys (for dashboard total)
-    total_calls = 0
-    per_plug: dict[str, int] = defaultdict(int)
-    user_calls = 0
-
-    for key, calls in USAGE_LOG.items():
-        for call in calls:
-            call_time = datetime.fromisoformat(call["timestamp"].replace("Z", "+00:00"))
-            if call_time >= month_start:
-                total_calls += 1
-                plug = call.get("plug_id", "unknown").replace("-v1", "")
-                per_plug[plug] += 1
-                if key == api_key:
-                    user_calls += 1
+    total_calls, user_calls, per_plug = get_api_usage(api_key)
 
     return {
         "total_calls_this_month": total_calls,
@@ -422,12 +455,8 @@ async def v1_chat(
     if not api_key:
         raise HTTPException(401, "API key required. Set your key in VS Code settings.")
 
-    # Log this API call
-    USAGE_LOG[api_key].append({
-        "timestamp": datetime.now(timezone.utc).isoformat(),
-        "plug_id":   request.plugin_id,
-        "mode":      "sme",
-    })
+    # Track start time
+    start_time = time.time()
 
     # Map "legal-v1" → "legal", "healthcare-v1" → "healthcare", etc.
     plug_id = request.plugin_id.replace("-v1", "")
@@ -445,6 +474,36 @@ async def v1_chat(
 
     # Build system prompt (always SME mode from VS Code)
     system = SME_PERSONAS.get(plug_id, SME_PERSONAS["legal"])
+
+    # Check custom config
+    custom_config = get_plugin_config(api_key, plug_id)
+    if custom_config:
+        import json
+        persona = custom_config.get("persona")
+        if persona:
+            system = persona
+            
+        dt_str = custom_config.get("decisionTree")
+        if dt_str:
+            try:
+                decisionTree = json.loads(dt_str)
+                if isinstance(decisionTree, list) and len(decisionTree) > 0:
+                    system += "\n\nDECISION TREE STEPS:\n"
+                    for i, step in enumerate(decisionTree):
+                        system += f"{i+1}. {step}\n"
+            except Exception:
+                pass
+                
+        gr_str = custom_config.get("guardrails")
+        if gr_str:
+            try:
+                guardrails = json.loads(gr_str)
+                if isinstance(guardrails, dict):
+                    topics = guardrails.get("forbiddenTopics", [])
+                    if topics:
+                        system += "\n\nCRITICAL GUARDRAILS:\nYou MUST NOT discuss the following topics under any circumstances:\n- " + "\n- ".join(topics)
+            except Exception:
+                pass
 
     # ── RAG: retrieve real document chunks ────────────────────────────
     chunks = retrieve(request.message, plug_id, top_k=5)
@@ -477,6 +536,15 @@ async def v1_chat(
             "Please upload relevant documents to your SME-Plug knowledge base "
             "and re-ask your question."
         )
+
+    latency_ms = int((time.time() - start_time) * 1000)
+    log_api_call(
+        api_key=api_key,
+        plug_id=plug_id,
+        endpoint="/v1/chat",
+        status=200,
+        latency_ms=latency_ms
+    )
 
     return {
         "response": reply,
@@ -526,6 +594,11 @@ async def upload_document(
     # Auto-ingest into ChromaDB
     from backend.rag.ingestor import ingest_plug
     chunks_count = ingest_plug(plug_id, str(DOCS_DIR))
+    
+    # Log Document to Supabase DB.
+    size_bytes = len(content)
+    api_key = authorization.replace("Bearer ", "") if authorization and authorization.startswith("Bearer ") else ""
+    log_document(filename=file.filename, size_bytes=size_bytes, plug_id=plug_id, api_key=api_key)
 
     return {
         "status":   "ingested",

@@ -54,14 +54,14 @@ export default function PluginDocsPage({ params }: { params: Promise<{ plugId: s
     };
 
     return (
-        <div>
+        <div className="space-y-8">
             <Link href={`/plugins/${plugId}`} className="inline-flex items-center gap-1.5 font-mono text-xs text-text-muted no-underline hover:text-lime mb-6">
                 <ArrowLeft size={14} /> Back to {docs.title}
             </Link>
 
-            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-                <h1 className="font-display text-3xl font-bold text-text-primary mb-2">{docs.title} — Documentation</h1>
-                <p className="font-mono text-sm text-text-muted">Integration guide, API reference, and configuration</p>
+            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="page-header mb-0">
+                <h1 className="ui-page-title text-3xl mb-2">{docs.title} — Documentation</h1>
+                <p className="ui-page-subtitle">Integration guide, API reference, and configuration</p>
             </motion.div>
 
             <div className="max-w-3xl space-y-8">

@@ -1,4 +1,4 @@
-"""Pydantic models for SME-Plug SDK responses."""
+"""Pydantic models for Tether SDK responses."""
 
 from __future__ import annotations
 
@@ -41,8 +41,8 @@ class EvalResponse(BaseModel):
     overall: float
 
 
-class SMEPlugError(Exception):
-    """Custom error for SME-Plug API failures."""
+class TetherError(Exception):
+    """Custom error for Tether API failures."""
 
     def __init__(self, message: str, code: str, status: int):
         super().__init__(message)
@@ -50,4 +50,4 @@ class SMEPlugError(Exception):
         self.status = status
 
     def __repr__(self) -> str:
-        return f"SMEPlugError(code={self.code!r}, status={self.status}, message={str(self)!r})"
+        return f"TetherError(code={self.code!r}, status={self.status}, message={str(self)!r})"

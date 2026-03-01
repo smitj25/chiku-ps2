@@ -1,12 +1,12 @@
 /**
- * SME-Plug Node.js SDK
+ * Tether Node.js SDK
  *
  * @example
  * ```typescript
- * import { SMEPlug } from '@smeplug/sdk'
+ * import { Tether } from '@tether/sdk'
  *
- * const plug = new SMEPlug({
- *   apiKey: process.env.SME_API_KEY!,
+ * const plug = new Tether({
+ *   apiKey: process.env.TETHER_API_KEY!,
  *   pluginId: 'legal-v1',
  * })
  *
@@ -16,12 +16,12 @@
  * ```
  */
 
-export interface SMEPlugOptions {
-    /** Your SME-Plug API key (sme_live_xxx or sme_test_xxx) */
+export interface TetherOptions {
+    /** Your Tether API key (tether_live_xxx or tether_test_xxx) */
     apiKey: string;
     /** Plugin ID to use (e.g. 'legal-v1', 'healthcare-v1') */
     pluginId: string;
-    /** API base URL (default: https://api.smeplug.dev) */
+    /** API base URL (default: https://api.tether.dev) */
     baseUrl?: string;
     /** Enable streaming responses (default: false) */
     stream?: boolean;
@@ -55,20 +55,20 @@ export interface UploadResponse {
     status: "processing" | "ready" | "error";
 }
 
-export class SMEPlug {
+export class Tether {
     private apiKey: string;
     private pluginId: string;
     private baseUrl: string;
     private timeout: number;
     private sessionId?: string;
 
-    constructor(options: SMEPlugOptions) {
+    constructor(options: TetherOptions) {
         if (!options.apiKey) throw new Error("apiKey is required");
         if (!options.pluginId) throw new Error("pluginId is required");
 
         this.apiKey = options.apiKey;
         this.pluginId = options.pluginId;
-        this.baseUrl = (options.baseUrl || "https://api.smeplug.dev").replace(
+        this.baseUrl = (options.baseUrl || "https://api.tether.dev").replace(
             /\/$/,
             ""
         );
@@ -206,12 +206,12 @@ export class SMEPlug {
             if (!res.ok) {
                 const body = await res.text().catch(() => "");
                 if (res.status === 401) {
-                    throw new SMEPlugError("Invalid API key", "INVALID_KEY", 401);
+                    throw new TetherError("Invalid API key", "INVALID_KEY", 401);
                 }
                 if (res.status === 429) {
-                    throw new SMEPlugError("Rate limit exceeded", "RATE_LIMITED", 429);
+                    throw new TetherError("Rate limit exceeded", "RATE_LIMITED", 429);
                 }
-                throw new SMEPlugError(
+                throw new TetherError(
                     `API error: ${res.status} ${body}`,
                     "API_ERROR",
                     res.status
@@ -225,16 +225,16 @@ export class SMEPlug {
     }
 }
 
-export class SMEPlugError extends Error {
+export class TetherError extends Error {
     code: string;
     status: number;
 
     constructor(message: string, code: string, status: number) {
         super(message);
-        this.name = "SMEPlugError";
+        this.name = "TetherError";
         this.code = code;
         this.status = status;
     }
 }
 
-export default SMEPlug;
+export default Tether;

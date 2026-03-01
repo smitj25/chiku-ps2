@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { backendUrl, publicRuntime } from "@/lib/public-runtime";
 
 interface Document {
     filename: string;
@@ -14,8 +15,6 @@ const PLUGINS = [
     { id: 'engineering', label: '⚙ Engineering', color: '#fbbf24' },
 ];
 
-const BACKEND_URL = 'http://localhost:8000';
-
 export default function DocumentsPage() {
     const [activePlugin, setActivePlugin] = useState('legal');
     const [documents, setDocuments] = useState<Document[]>([]);
@@ -26,8 +25,8 @@ export default function DocumentsPage() {
     const fetchDocs = useCallback(async () => {
         try {
             const res = await fetch(
-                `${BACKEND_URL}/v1/documents?plugin_id=${activePlugin}`,
-                { headers: { Authorization: 'Bearer dev-test-key-123' } }
+                `${backendUrl("/v1/documents")}?plugin_id=${activePlugin}`,
+                { headers: { Authorization: `Bearer ${publicRuntime.demoApiKey}` } }
             );
             const data = await res.json();
             setDocuments(data.documents || []);
@@ -46,9 +45,9 @@ export default function DocumentsPage() {
             formData.append('file', file);
             formData.append('plugin_id', activePlugin);
             try {
-                const res = await fetch(`${BACKEND_URL}/v1/upload`, {
+                const res = await fetch(backendUrl("/v1/upload"), {
                     method: 'POST',
-                    headers: { Authorization: 'Bearer dev-test-key-123' },
+                    headers: { Authorization: `Bearer ${publicRuntime.demoApiKey}` },
                     body: formData,
                 });
                 const data = await res.json();
@@ -68,8 +67,8 @@ export default function DocumentsPage() {
     const handleDelete = async (filename: string) => {
         try {
             await fetch(
-                `${BACKEND_URL}/v1/documents/${encodeURIComponent(filename)}?plugin_id=${activePlugin}`,
-                { method: 'DELETE', headers: { Authorization: 'Bearer dev-test-key-123' } }
+                `${backendUrl(`/v1/documents/${encodeURIComponent(filename)}`)}?plugin_id=${activePlugin}`,
+                { method: 'DELETE', headers: { Authorization: `Bearer ${publicRuntime.demoApiKey}` } }
             );
             setMessage(`Deleted ${filename}`);
             fetchDocs();
@@ -83,17 +82,17 @@ export default function DocumentsPage() {
     return (
         <div className="space-y-8">
             {/* Header */}
-            <div className="flex items-center justify-between">
+            <div className="page-header flex items-center justify-between">
                 <div>
-                    <h1 className="text-3xl font-bold text-white tracking-tight">Documents</h1>
-                    <p className="text-[#8b949e] mt-1">
+                    <h1 className="ui-page-title text-3xl">Documents</h1>
+                    <p className="ui-page-subtitle mt-1">
                         Upload source documents to your SME knowledge base. The AI will cite these — never hallucinate.
                     </p>
                 </div>
             </div>
 
             {/* Plugin Selector */}
-            <div className="flex gap-3">
+            <div className="section-card p-3 flex gap-3 overflow-x-auto">
                 {PLUGINS.map(p => (
                     <button
                         key={p.id}
@@ -154,7 +153,7 @@ export default function DocumentsPage() {
             )}
 
             {/* Documents Table */}
-            <div className="rounded-xl overflow-hidden" style={{ border: '1px solid #30363d' }}>
+            <div className="section-card overflow-hidden">
                 <div
                     className="px-5 py-3 font-mono text-xs font-bold tracking-widest uppercase"
                     style={{ background: '#161b22', color: pluginColor, borderBottom: '1px solid #30363d' }}
@@ -208,7 +207,7 @@ export default function DocumentsPage() {
             </div>
 
             {/* How it works */}
-            <div className="rounded-xl p-6" style={{ background: '#161b22', border: '1px solid #30363d' }}>
+            <div className="section-card-subtle p-6">
                 <h3 className="text-white font-bold text-sm mb-3 font-mono tracking-wide">HOW RAG CITATIONS WORK</h3>
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-center">
                     {[

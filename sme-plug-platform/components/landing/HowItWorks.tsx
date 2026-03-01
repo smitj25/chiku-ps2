@@ -5,7 +5,7 @@ import { STEPS } from "@/lib/data";
 
 export default function HowItWorks() {
     return (
-        <section className="py-24 px-6 md:px-20">
+        <section className="py-24 px-6 md:px-20 border-b border-border bg-[linear-gradient(180deg,rgba(255,255,255,0.01),rgba(255,255,255,0))]">
             <div className="max-w-[1200px] mx-auto">
                 <div className="text-center mb-16">
                     <div className="font-mono text-[11px] text-lime tracking-[0.15em] mb-4">
@@ -16,7 +16,7 @@ export default function HowItWorks() {
                     </h2>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {STEPS.map((step, i) => (
                         <motion.div
                             key={i}
@@ -24,17 +24,17 @@ export default function HowItWorks() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: i * 0.15 }}
-                            className="relative p-8"
+                            className="relative p-8 rounded-lg border border-border bg-surface"
                         >
                             {/* Arrow connector */}
                             {i < STEPS.length - 1 && (
-                                <div className="hidden md:block absolute top-11 -right-5 w-10 h-px bg-[rgba(163,230,53,0.3)]">
+                                <div className="hidden md:block absolute top-1/2 -right-4 w-8 h-px bg-[rgba(163,230,53,0.28)]">
                                     <div
                                         className="absolute right-0 -top-1"
                                         style={{
                                             width: 0,
                                             height: 0,
-                                            borderLeft: "6px solid rgba(163,230,53,0.5)",
+                                            borderLeft: "5px solid rgba(163,230,53,0.45)",
                                             borderTop: "4px solid transparent",
                                             borderBottom: "4px solid transparent",
                                         }}

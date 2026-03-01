@@ -25,6 +25,8 @@ model Tenant {
   apiKeys     ApiKey[]
   purchases   Purchase[]
   sessions    Session[]
+  apiCalls    ApiCall[]
+  documents   Document[]
   createdAt   DateTime   @default(now())
 }
 
@@ -72,6 +74,7 @@ model ApiKey {
   keyHash   String    @unique
   prefix    String
   lastUsed  DateTime?
+  apiCalls  ApiCall[]
   createdAt DateTime  @default(now())
   revokedAt DateTime?
 }
@@ -84,4 +87,27 @@ model Session {
   messages  String   // JSON array of messages
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model ApiCall {
+  id        String   @id @default(cuid())
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id])
+  apiKeyId  String?
+  apiKey    ApiKey?  @relation(fields: [apiKeyId], references: [id])
+  plugId    String
+  endpoint  String
+  status    Int
+  latencyMs Int
+  createdAt DateTime @default(now())
+}
+
+model Document {
+  id        String   @id @default(cuid())
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id])
+  plugId    String
+  filename  String
+  sizeBytes Int
+  createdAt DateTime @default(now())
 }

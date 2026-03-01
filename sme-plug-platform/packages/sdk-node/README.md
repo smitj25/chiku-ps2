@@ -1,20 +1,20 @@
-# @smeplug/sdk
+# @tether/sdk
 
-Official Node.js SDK for [SME-Plug](https://smeplug.dev) — AI expert plugins with verified citations.
+Official Node.js SDK for [Tether](https://tether.dev) — AI expert plugins with verified citations.
 
 ## Install
 
 ```bash
-npm install @smeplug/sdk
+npm install @tether/sdk
 ```
 
 ## Quick Start
 
 ```typescript
-import { SMEPlug } from '@smeplug/sdk'
+import { Tether } from '@tether/sdk'
 
-const plug = new SMEPlug({
-  apiKey: process.env.SME_API_KEY!,
+const plug = new Tether({
+  apiKey: process.env.TETHER_API_KEY!,
   pluginId: 'legal-v1',
 })
 
@@ -39,10 +39,10 @@ console.log(response.ragasScore)  // 0.93
 
 ## API
 
-### `new SMEPlug(options)`
-- `apiKey` — Your API key (`sme_live_xxx`)
+### `new Tether(options)`
+- `apiKey` — Your API key (`tether_live_xxx`)
 - `pluginId` — Plugin to use
-- `baseUrl` — API URL (default: `https://api.smeplug.dev`)
+- `baseUrl` — API URL (default: `https://api.tether.dev`)
 - `timeout` — Request timeout in ms (default: `30000`)
 
 ### `plug.chat(message, options?)`
@@ -63,12 +63,12 @@ Clear session to start a new conversation.
 ## Error Handling
 
 ```typescript
-import { SMEPlug, SMEPlugError } from '@smeplug/sdk'
+import { Tether, TetherError } from '@tether/sdk'
 
 try {
   const res = await plug.chat('query')
 } catch (err) {
-  if (err instanceof SMEPlugError) {
+  if (err instanceof TetherError) {
     console.log(err.code)    // 'INVALID_KEY' | 'RATE_LIMITED' | 'API_ERROR'
     console.log(err.status)  // 401 | 429 | etc.
   }

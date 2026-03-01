@@ -3,8 +3,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, ShieldCheck, ShieldAlert, FileText, Sparkles, Zap, BookOpen } from 'lucide-react';
-
-const BACKEND_URL = 'http://localhost:8000';
+import { backendUrl, publicRuntime } from "@/lib/public-runtime";
 
 const PLUGINS = [
     { id: 'legal', label: 'Legal', color: '#60a5fa', icon: '⚖️' },
@@ -82,9 +81,9 @@ export default function ComparePage() {
         setLoading(true);
         setResult(null);
         try {
-            const res = await fetch(`${BACKEND_URL}/v1/compare`, {
+            const res = await fetch(backendUrl("/v1/compare"), {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'x-api-key': 'dev-test-key-123' },
+                headers: { 'Content-Type': 'application/json', 'x-api-key': publicRuntime.demoApiKey },
                 body: JSON.stringify({ message: text, plug_id: plugId }),
             });
             setResult(await res.json());
@@ -97,27 +96,27 @@ export default function ComparePage() {
     const activePlugin = PLUGINS.find((p) => p.id === plugId)!;
 
     return (
-        <div className="max-w-[1400px] mx-auto">
+        <div className="space-y-6">
             {/* ─── Header ────────────────────────────────────────────── */}
-            <div className="mb-10">
+            <div className="page-header mb-0">
                 <div className="flex items-center gap-3 mb-3">
                     <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-[rgba(163,230,53,0.08)] border border-[rgba(163,230,53,0.2)]">
                         <Sparkles size={20} className="text-lime" />
                     </div>
                     <div>
-                        <h1 className="font-display text-3xl font-extrabold text-text-primary leading-tight">
+                        <h1 className="ui-page-title text-3xl leading-tight">
                             Hallucination Comparison
                         </h1>
                     </div>
                 </div>
-                <p className="text-text-muted text-sm leading-relaxed max-w-xl mt-2">
-                    The same question runs through a raw LLM and through SME-Plug simultaneously.
-                    Watch how unverified AI invents citations while SME-Plug grounds its answers in your actual documents.
+                <p className="ui-page-subtitle mt-2">
+                    The same question runs through a raw LLM and through Tether simultaneously.
+                    Watch how unverified AI invents citations while Tether grounds its answers in your actual documents.
                 </p>
             </div>
 
             {/* ─── Controls ──────────────────────────────────────────── */}
-            <div className="bg-surface border border-border rounded-2xl p-6 mb-6">
+            <div className="section-card p-6">
                 {/* Plugin selector */}
                 <div className="flex items-center gap-2 mb-5">
                     <span className="font-mono text-xs text-text-ghost tracking-widest mr-1">DOMAIN</span>
@@ -242,7 +241,7 @@ export default function ComparePage() {
                             <div className="flex-1 min-w-0">
                                 <span className="font-mono text-sm font-bold text-text-primary">
                                     {result.verdict.sme_verified
-                                        ? 'Hallucination Caught — SME-Plug verified against real documents'
+                                        ? 'Hallucination Caught — Tether verified against real documents'
                                         : 'Upload documents for full verification'}
                                 </span>
                                 <p className="font-mono text-xs text-text-muted mt-0.5 leading-relaxed">
@@ -265,7 +264,7 @@ export default function ComparePage() {
                                 icon={<ShieldAlert size={16} />}
                             />
 
-                            {/* ── RIGHT: SME-Plug ── */}
+                            {/* ── RIGHT: Tether ── */}
                             <ResponsePanel
                                 title={result.sme.label}
                                 subtitle={`RAG · Persona · Guardrails · ${result.sme.chunks_used} doc chunks`}

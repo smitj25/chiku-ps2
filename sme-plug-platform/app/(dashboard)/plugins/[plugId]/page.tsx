@@ -51,20 +51,20 @@ export default function PluginDetailPage({ params }: { params: Promise<{ plugId:
     }
 
     return (
-        <div>
+        <div className="space-y-6">
             <Link href="/plugins" className="inline-flex items-center gap-1.5 font-mono text-xs text-text-muted no-underline hover:text-lime mb-6">
                 <ArrowLeft size={14} /> Back to My Plugins
             </Link>
 
             {/* Header */}
-            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="bg-surface border border-border rounded-lg p-8 mb-6">
+            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="section-card p-8">
                 <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
                     <div className="w-16 h-16 rounded-xl flex items-center justify-center text-3xl shrink-0" style={{ background: plug.bg, border: `1px solid ${plug.border}` }}>
                         {plug.icon}
                     </div>
                     <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-3 mb-1">
-                            <h1 className="font-display text-3xl font-bold text-text-primary">{plug.name}</h1>
+                            <h1 className="ui-page-title text-3xl">{plug.name}</h1>
                             <span className="font-mono text-[10px] bg-[rgba(52,211,153,0.1)] border border-[rgba(52,211,153,0.3)] text-plug-healthcare px-2 py-0.5 rounded-[3px]">ACTIVE</span>
                         </div>
                         <div className="font-mono text-[11px] tracking-[0.05em] mb-3" style={{ color: plug.color }}>{plug.domain}</div>
@@ -134,7 +134,7 @@ export default function PluginDetailPage({ params }: { params: Promise<{ plugId:
             </div>
 
             {/* Quick example */}
-            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="mt-6 bg-surface border border-border rounded-lg p-6">
+            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="section-card p-6">
                 <div className="font-mono text-[10px] text-text-faint tracking-[0.1em] mb-3">EXAMPLE QUERY</div>
                 <div className="bg-canvas border border-border rounded-md p-4 font-mono text-sm text-text-primary leading-[1.7]">
                     <span className="text-text-ghost">$</span> {plug.example}

@@ -1,19 +1,19 @@
-# smeplug
+# tether
 
-Official Python SDK for [SME-Plug](https://smeplug.dev) — AI expert plugins with verified citations.
+Official Python SDK for [Tether](https://tether.dev) — AI expert plugins with verified citations.
 
 ## Install
 
 ```bash
-pip install smeplug
+pip install tether
 ```
 
 ## Quick Start
 
 ```python
-from smeplug import SMEPlug
+from tether import Tether
 
-plug = SMEPlug(api_key="sme_live_xxx", plugin_id="legal-v1")
+plug = Tether(api_key="tether_live_xxx", plugin_id="legal-v1")
 
 response = plug.chat("What are the GDPR penalties for non-compliance?")
 
@@ -26,7 +26,7 @@ print(response.ragas_score) # 0.93
 ## Context Manager
 
 ```python
-with SMEPlug(api_key="sme_live_xxx", plugin_id="legal-v1") as plug:
+with Tether(api_key="tether_live_xxx", plugin_id="legal-v1") as plug:
     res = plug.chat("Analyze clause 4.2")
     print(res.text)
 ```
@@ -51,11 +51,11 @@ print(scores.overall)            # 0.91
 ## Error Handling
 
 ```python
-from smeplug import SMEPlug, SMEPlugError
+from tether import Tether, TetherError
 
 try:
     res = plug.chat("query")
-except SMEPlugError as e:
+except TetherError as e:
     print(e.code)    # 'INVALID_KEY' | 'RATE_LIMITED' | 'API_ERROR'
     print(e.status)  # 401 | 429 | etc.
 ```

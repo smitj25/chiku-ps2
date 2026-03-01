@@ -14,23 +14,23 @@ export default function TerminalSnippet() {
                 <div className="text-[#6b7280]">{"// Install the SDK"}</div>
                 <div>
                     <span className="text-lime">npm</span>{" "}
-                    <span className="text-text-secondary">install @smeplug/sdk</span>
+                    <span className="text-text-secondary">install @tether/sdk</span>
                 </div>
                 <div className="h-[1.8em]" />
                 <div className="text-[#6b7280]">{"// Use in your project"}</div>
                 <div>
                     <span className="text-[#818cf8]">import</span>{" "}
-                    <span className="text-text-secondary">{"{ SMEPlug }"}</span>{" "}
+                    <span className="text-text-secondary">{"{ Tether }"}</span>{" "}
                     <span className="text-[#818cf8]">from</span>{" "}
-                    <span className="text-plug-healthcare">{`'@smeplug/sdk'`}</span>
+                    <span className="text-plug-healthcare">{`'@tether/sdk'`}</span>
                 </div>
                 <div className="h-[1.8em]" />
                 <div>
                     <span className="text-[#818cf8]">const</span>{" "}
-                    <span className="text-plug-engineering">plug</span>{" "}
+                    <span className="text-plug-engineering">client</span>{" "}
                     <span className="text-text-secondary">=</span>{" "}
                     <span className="text-[#818cf8]">new</span>{" "}
-                    <span className="text-plug-legal">SMEPlug</span>
+                    <span className="text-plug-legal">Tether</span>
                     <span className="text-text-secondary">{"({"}</span>
                 </div>
                 <div className="pl-4">
@@ -38,7 +38,7 @@ export default function TerminalSnippet() {
                     <span className="text-text-secondary">:</span>{" "}
                     <span className="text-[#fca5a5]">process</span>
                     <span className="text-text-secondary">.env.</span>
-                    <span className="text-lime">SME_API_KEY</span>
+                    <span className="text-lime">TETHER_API_KEY</span>
                     <span className="text-text-secondary">,</span>
                 </div>
                 <div className="pl-4">
@@ -54,7 +54,7 @@ export default function TerminalSnippet() {
                     <span className="text-plug-engineering">res</span>{" "}
                     <span className="text-text-secondary">=</span>{" "}
                     <span className="text-[#818cf8]">await</span>{" "}
-                    <span className="text-plug-engineering">plug</span>
+                    <span className="text-plug-engineering">client</span>
                     <span className="text-text-secondary">.</span>
                     <span className="text-plug-legal">chat</span>
                     <span className="text-text-secondary">(</span>

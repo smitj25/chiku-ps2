@@ -1,7 +1,7 @@
 {
-    "name": "@smeplug/sdk",
+    "name": "@tether/sdk",
     "version": "0.1.0",
-    "description": "Official Node.js SDK for SME-Plug — AI expert plugins with verified citations",
+    "description": "Official Node.js SDK for Tether — AI expert plugins with verified citations",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "module": "dist/index.mjs",
@@ -18,7 +18,7 @@
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "https://github.com/smeplug/sdk-node"
+        "url": "https://github.com/tether/sdk-node"
     },
     "keywords": [
         "ai",

@@ -8,14 +8,14 @@ export default function SettingsPage() {
     const [email, setEmail] = useState("admin@acme.com");
 
     return (
-        <div>
-            <div className="mb-8">
-                <h1 className="font-display text-3xl font-bold text-text-primary mb-2">Settings</h1>
-                <p className="font-mono text-sm text-text-muted">Account and organization settings</p>
+        <div className="space-y-8">
+            <div className="page-header">
+                <h1 className="ui-page-title text-3xl mb-2">Settings</h1>
+                <p className="ui-page-subtitle">Account and organization settings</p>
             </div>
 
             <div className="max-w-2xl space-y-6">
-                <div className="bg-surface border border-border rounded-lg p-6">
+                <div className="section-card p-6">
                     <div className="font-mono text-[10px] text-text-faint tracking-[0.1em] mb-4">ORGANIZATION</div>
                     <div className="space-y-4">
                         <div>
@@ -32,7 +32,7 @@ export default function SettingsPage() {
                     </button>
                 </div>
 
-                <div className="bg-surface border border-border rounded-lg p-6">
+                <div className="section-card p-6">
                     <div className="font-mono text-[10px] text-text-faint tracking-[0.1em] mb-4">DANGER ZONE</div>
                     <div className="bg-[rgba(239,68,68,0.05)] border border-[rgba(239,68,68,0.2)] rounded-md p-4 flex items-center justify-between">
                         <div>

@@ -15,6 +15,7 @@ import {
     X,
     FileText,
     GitCompareArrows,
+    Database,
 } from "lucide-react";
 
 const NAV_ITEMS = [
@@ -22,15 +23,31 @@ const NAV_ITEMS = [
     { href: "/compare", label: "Compare", icon: GitCompareArrows },
     { href: "/marketplace", label: "Marketplace", icon: Store },
     { href: "/plugins", label: "My Plugins", icon: Puzzle },
+    { href: "/integrations", label: "Integrations", icon: Database },
     { href: "/documents", label: "Documents", icon: FileText },
     { href: "/api-keys", label: "API Keys", icon: Key },
     { href: "/billing", label: "Billing", icon: CreditCard },
     { href: "/settings", label: "Settings", icon: Settings },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({
+    userEmail = "admin@acme.com",
+    companyName = "Acme Corp"
+}: {
+    userEmail?: string;
+    companyName?: string;
+}) {
     const pathname = usePathname();
     const [mobileOpen, setMobileOpen] = useState(false);
+
+    const initials = companyName
+        ? companyName.substring(0, 2).toUpperCase()
+        : userEmail.substring(0, 2).toUpperCase();
+
+    const handleLogout = async () => {
+        await fetch("/api/auth/logout", { method: "POST" });
+        window.location.href = "/login";
+    };
 
     return (
         <>
@@ -52,11 +69,11 @@ export default function Sidebar() {
 
             {/* Sidebar */}
             <aside
-                className={`fixed lg:relative top-0 left-0 h-screen w-64 bg-canvas border-r border-border flex flex-col z-50 transition-transform duration-300 ${mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+                className={`fixed lg:relative top-0 left-0 h-screen w-[272px] bg-canvas-subtle border-r border-border flex flex-col z-50 transition-transform duration-300 ${mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
                     }`}
             >
                 {/* Logo */}
-                <div className="h-16 flex items-center justify-between px-6 border-b border-border">
+                <div className="h-[70px] flex items-center justify-between px-6 border-b border-border bg-[rgba(255,255,255,0.01)]">
                     <Link href="/" className="flex items-center gap-2.5 no-underline">
                         <div
                             className="w-7 h-7"
@@ -67,7 +84,7 @@ export default function Sidebar() {
                             }}
                         />
                         <span className="font-mono font-bold text-base text-text-primary tracking-tight">
-                            sme<span className="text-lime">plug</span>
+                            te<span className="text-lime">ther</span>
                         </span>
                     </Link>
                     <button
@@ -103,18 +120,21 @@ export default function Sidebar() {
                 <div className="px-3 py-5 border-t border-border">
                     <div className="flex items-center gap-3 px-4 py-2.5 mb-2">
                         <div className="w-9 h-9 rounded-full bg-[rgba(163,230,53,0.15)] flex items-center justify-center font-mono text-xs text-lime font-bold">
-                            AC
+                            {initials}
                         </div>
                         <div className="flex-1 min-w-0">
                             <div className="font-mono text-xs text-text-primary truncate">
-                                admin@acme.com
+                                {userEmail}
                             </div>
-                            <div className="font-mono text-[11px] text-text-ghost">
-                                Acme Corp
+                            <div className="font-mono text-[11px] text-text-ghost truncate">
+                                {companyName}
                             </div>
                         </div>
                     </div>
-                    <button className="w-full flex items-center gap-3 px-4 py-3 rounded-lg font-mono text-sm text-text-faint hover:text-red-stat hover:bg-[rgba(239,68,68,0.05)] transition-all cursor-pointer bg-transparent border-none">
+                    <button
+                        onClick={handleLogout}
+                        className="w-full flex items-center gap-3 px-4 py-3 rounded-lg font-mono text-sm text-text-faint hover:text-red-stat hover:bg-[rgba(239,68,68,0.05)] transition-all cursor-pointer bg-transparent border-none"
+                    >
                         <LogOut size={16} />
                         Sign out
                     </button>

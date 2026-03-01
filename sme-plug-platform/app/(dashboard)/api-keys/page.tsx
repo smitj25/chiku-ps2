@@ -66,12 +66,12 @@ export default function ApiKeysPage() {
     };
 
     return (
-        <div>
+        <div className="space-y-8">
             {/* HEADER */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+            <div className="page-header flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h1 className="font-display text-3xl font-bold text-text-primary mb-2">API Keys</h1>
-                    <p className="font-mono text-sm text-text-muted">
+                    <h1 className="ui-page-title text-3xl mb-2">API Keys</h1>
+                    <p className="ui-page-subtitle">
                         Generate scoped API keys for each SME plugin. Each key unlocks one plugin.<br />
                         Copy your key immediately — it&apos;s shown once and never stored.
                     </p>
@@ -85,7 +85,7 @@ export default function ApiKeysPage() {
             </div>
 
             {/* USAGE CALLOUT */}
-            <div className="bg-[rgba(163,230,53,0.04)] border border-[rgba(163,230,53,0.15)] p-4 mb-8 rounded-md">
+            <div className="bg-[rgba(163,230,53,0.04)] border border-[rgba(163,230,53,0.15)] p-4 rounded-md">
                 <div className="font-mono text-xs font-bold text-lime tracking-[0.06em] mb-1">USING YOUR KEY IN VS CODE</div>
                 <div className="font-mono text-[11px] text-[rgba(163,230,53,0.6)] leading-relaxed">
                     1. Install the SME-Plug extension &nbsp;·&nbsp;
@@ -105,7 +105,7 @@ export default function ApiKeysPage() {
                     <div className="font-mono text-xs text-text-ghost">Generate a key to start using SME-Plug in your IDE</div>
                 </div>
             ) : (
-                <div className="bg-surface border border-border rounded-lg overflow-x-auto">
+                <div className="section-card overflow-x-auto">
                     <table className="w-full">
                         <thead>
                             <tr className="border-b border-border">

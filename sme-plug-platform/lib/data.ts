@@ -45,6 +45,49 @@ export const PLUGS = [
     },
 ];
 
+export const ALL_PLUGS = [
+    ...PLUGS,
+    {
+        id: "finance",
+        name: "Finance SME",
+        domain: "Banking & Risk",
+        color: "#c084fc",
+        bg: "rgba(192,132,252,0.08)",
+        border: "rgba(192,132,252,0.25)",
+        score: 0.89,
+        price: 500,
+        icon: "💹",
+        tags: ["Risk Models", "Basel III", "Fraud Detection", "KYC"],
+        example: "Evaluate credit risk exposure for portfolio segment A under Basel III.",
+    },
+    {
+        id: "education",
+        name: "Education SME",
+        domain: "Curriculum & Assessment",
+        color: "#f472b6",
+        bg: "rgba(244,114,182,0.08)",
+        border: "rgba(244,114,182,0.25)",
+        score: 0.88,
+        price: 500,
+        icon: "📚",
+        tags: ["Curriculum Design", "Assessment", "Bloom's Taxonomy", "IEP"],
+        example: "Create a rubric for evaluating 8th-grade argumentative essays.",
+    },
+    {
+        id: "cyber",
+        name: "Cybersecurity SME",
+        domain: "Threat & Compliance",
+        color: "#fb923c",
+        bg: "rgba(251,146,60,0.08)",
+        border: "rgba(251,146,60,0.25)",
+        score: 0.90,
+        price: 500,
+        icon: "🛡",
+        tags: ["NIST", "SOC 2", "Pen Testing", "Incident Response"],
+        example: "Assess NIST CSF compliance gaps for cloud infrastructure.",
+    },
+];
+
 export const STATS = [
     {
         value: "40%",

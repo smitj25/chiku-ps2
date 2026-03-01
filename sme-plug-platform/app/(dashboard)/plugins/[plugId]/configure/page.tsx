@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, use, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
     User,
@@ -42,7 +42,8 @@ const FORBIDDEN_TOPICS = [
     "Personal data sharing",
 ];
 
-export default function ConfiguratorPage() {
+export default function ConfiguratorPage({ params }: { params: Promise<{ plugId: string }> }) {
+    const { plugId } = use(params);
     const [activeTab, setActiveTab] = useState("persona");
     const [persona, setPersona] = useState(
         "You are a legal subject matter expert specializing in contract law, GDPR compliance, and intellectual property. You provide precise, cited analysis of legal documents and clauses. You always reference specific articles, sections, and page numbers from source documents."
@@ -58,11 +59,81 @@ export default function ConfiguratorPage() {
     >([
         {
             role: "system",
-            content:
-                "Plugin loaded: Legal SME v1.0 • RAGAS: 0.93 • Guardrails: active",
+            content: "Plugin loaded: Validating config...",
         },
     ]);
     const [chatInput, setChatInput] = useState("");
+    const [isSaving, setIsSaving] = useState(false);
+    const [isLoaded, setIsLoaded] = useState(false);
+    const [pluginName, setPluginName] = useState("Plugin");
+    const [ragasScore, setRagasScore] = useState(0.90);
+
+    useEffect(() => {
+        async function loadConfig() {
+            try {
+                // Fetch config
+                const res = await fetch(`/api/plugins/${plugId}/config`);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.config) {
+                        setPersona(data.config.persona);
+                        setSteps(data.config.decisionTree);
+                        const g = data.config.guardrails;
+                        setTopics(g.forbiddenTopics || []);
+                        setPiiRedaction(g.piiRedaction ?? true);
+                        setCitationMode(g.citationMode || "block");
+                    }
+                }
+
+                // Fetch total plugin list to grab name and RAGAS
+                const pRes = await fetch("/api/plugins");
+                if (pRes.ok) {
+                    const pData = await pRes.json();
+                    const me = pData.plugins?.find((p: any) => p.id === plugId);
+                    if (me) {
+                        setPluginName(me.name);
+                        setRagasScore(me.ragasScore || 0.90);
+                        setChatMessages([
+                            {
+                                role: "system",
+                                content: `Plugin loaded: ${me.name} v1.0 • RAGAS: ${me.ragasScore?.toFixed(2) || "0.90"} • Guardrails: active`,
+                            }
+                        ]);
+                    }
+                }
+            } catch (e) {
+                console.error(e);
+            } finally {
+                setIsLoaded(true);
+            }
+        }
+        loadConfig();
+    }, [plugId]);
+
+    const deployChanges = async () => {
+        setIsSaving(true);
+        try {
+            await fetch(`/api/plugins/${plugId}/config`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    persona,
+                    decisionTree: steps,
+                    guardrails: {
+                        forbiddenTopics: topics,
+                        piiRedaction,
+                        citationMode,
+                    }
+                })
+            });
+            alert("Configuration saved successfully!");
+        } catch (e) {
+            console.error(e);
+            alert("Failed to save configuration.");
+        } finally {
+            setIsSaving(false);
+        }
+    };
 
     const addStep = () => {
         if (newStep.trim()) {
@@ -101,30 +172,34 @@ export default function ConfiguratorPage() {
     };
 
     return (
-        <div>
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+        <div className="space-y-8">
+            <div className="page-header flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h1 className="font-display text-3xl font-bold text-text-primary mb-2">
+                    <h1 className="ui-page-title text-3xl mb-2">
                         Plugin Configurator
                     </h1>
-                    <p className="font-mono text-sm text-text-muted">
-                        Customize your Legal SME plugin
+                    <p className="ui-page-subtitle">
+                        Customize your {pluginName} plugin
                     </p>
                 </div>
-                <button className="bg-lime text-canvas font-mono font-bold text-xs tracking-[0.06em] px-5 py-2.5 hover:opacity-90 transition-opacity cursor-pointer border-none">
-                    DEPLOY CHANGES →
+                <button
+                    onClick={deployChanges}
+                    disabled={!isLoaded || isSaving}
+                    className="bg-lime text-canvas font-mono font-bold text-xs tracking-[0.06em] px-5 py-2.5 hover:opacity-90 transition-opacity cursor-pointer border-none disabled:opacity-50"
+                >
+                    {isSaving ? "SAVING..." : "DEPLOY CHANGES →"}
                 </button>
             </div>
 
             {/* Tabs */}
-            <div className="flex gap-1 mb-6 bg-surface border border-border rounded-lg p-1 overflow-x-auto">
+            <div className="section-card-subtle p-1 flex gap-1 overflow-x-auto">
                 {TABS.map((tab) => (
                     <button
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id)}
                         className={`flex items-center gap-2 font-mono text-[12px] px-4 py-2.5 rounded-md transition-all cursor-pointer border-none whitespace-nowrap ${activeTab === tab.id
-                                ? "bg-[rgba(163,230,53,0.1)] text-lime border border-[rgba(163,230,53,0.2)]"
-                                : "text-text-muted hover:text-text-primary bg-transparent"
+                            ? "bg-[rgba(163,230,53,0.1)] text-lime border border-[rgba(163,230,53,0.2)]"
+                            : "text-text-muted hover:text-text-primary bg-transparent"
                             }`}
                     >
                         <tab.icon size={14} />
@@ -269,8 +344,8 @@ export default function ConfiguratorPage() {
                                         </div>
                                         <span
                                             className={`font-mono text-[10px] px-2 py-0.5 rounded-[3px] ${doc.status === "ready"
-                                                    ? "bg-[rgba(52,211,153,0.1)] text-plug-healthcare border border-[rgba(52,211,153,0.3)]"
-                                                    : "bg-[rgba(251,191,36,0.1)] text-plug-engineering border border-[rgba(251,191,36,0.3)]"
+                                                ? "bg-[rgba(52,211,153,0.1)] text-plug-healthcare border border-[rgba(52,211,153,0.3)]"
+                                                : "bg-[rgba(251,191,36,0.1)] text-plug-engineering border border-[rgba(251,191,36,0.3)]"
                                                 }`}
                                         >
                                             {doc.status.toUpperCase()}
@@ -377,15 +452,15 @@ export default function ConfiguratorPage() {
                                         key={mode.value}
                                         onClick={() => setCitationMode(mode.value)}
                                         className={`w-full text-left p-4 rounded-md transition-all cursor-pointer border ${citationMode === mode.value
-                                                ? "bg-[rgba(163,230,53,0.05)] border-[rgba(163,230,53,0.3)]"
-                                                : "bg-canvas border-border hover:border-border-hover"
+                                            ? "bg-[rgba(163,230,53,0.05)] border-[rgba(163,230,53,0.3)]"
+                                            : "bg-canvas border-border hover:border-border-hover"
                                             }`}
                                     >
                                         <div className="flex items-center gap-3">
                                             <div
                                                 className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${citationMode === mode.value
-                                                        ? "border-lime"
-                                                        : "border-text-ghost"
+                                                    ? "border-lime"
+                                                    : "border-text-ghost"
                                                     }`}
                                             >
                                                 {citationMode === mode.value && (
@@ -425,10 +500,10 @@ export default function ConfiguratorPage() {
                                     >
                                         <div
                                             className={`max-w-[85%] rounded-lg px-4 py-3 font-mono text-xs leading-[1.7] ${msg.role === "user"
-                                                    ? "bg-[rgba(163,230,53,0.1)] border border-[rgba(163,230,53,0.2)] text-text-primary"
-                                                    : msg.role === "system"
-                                                        ? "bg-canvas border border-border text-text-ghost text-[11px]"
-                                                        : "bg-canvas border border-border text-text-secondary"
+                                                ? "bg-[rgba(163,230,53,0.1)] border border-[rgba(163,230,53,0.2)] text-text-primary"
+                                                : msg.role === "system"
+                                                    ? "bg-canvas border border-border text-text-ghost text-[11px]"
+                                                    : "bg-canvas border border-border text-text-secondary"
                                                 }`}
                                         >
                                             {msg.content}

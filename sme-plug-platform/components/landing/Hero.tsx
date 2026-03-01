@@ -15,17 +15,17 @@ function CitationBadge({ text }: { text: string }) {
 
 export default function Hero() {
     return (
-        <section className="min-h-screen flex items-center px-6 md:px-20 pt-28 pb-20 relative overflow-hidden">
+        <section className="min-h-[calc(100vh-4rem)] flex items-center px-6 md:px-20 pt-28 pb-20 relative overflow-hidden border-b border-border">
             {/* BG Glow */}
             <div
                 className="absolute pointer-events-none"
                 style={{
-                    top: "20%",
-                    left: "55%",
-                    width: "600px",
-                    height: "600px",
+                    top: "18%",
+                    left: "52%",
+                    width: "720px",
+                    height: "720px",
                     background:
-                        "radial-gradient(circle, rgba(163,230,53,0.06) 0%, transparent 70%)",
+                        "radial-gradient(circle, rgba(163,230,53,0.08) 0%, transparent 72%)",
                 }}
             />
 
@@ -42,14 +42,14 @@ export default function Hero() {
                         B2B ENTERPRISE · DEVELOPER PLATFORM
                     </div>
 
-                    <h1 className="font-display text-[clamp(42px,5vw,68px)] font-bold leading-[1.05] tracking-[-0.03em] text-text-primary mb-6">
+                    <h1 className="ui-page-title text-[clamp(42px,5vw,68px)] mb-6">
                         The AI Expert
                         <br />
                         That{" "}
                         <span className="text-lime">Cites Its Sources</span>
                     </h1>
 
-                    <p className="font-mono text-[15px] leading-[1.7] text-text-muted max-w-[480px] mb-10">
+                    <p className="font-mono text-[15px] text-text-muted ui-copy max-w-[56ch] mb-10">
                         Hot-swappable AI expert plugins for enterprise. Legal, Healthcare,
                         Engineering. Every claim verified. Every fact cited. Zero
                         hallucinations. Import to VS Code, Cursor, or any codebase in 60
@@ -98,7 +98,7 @@ export default function Hero() {
                     <TerminalSnippet />
 
                     {/* Sample Response */}
-                    <div className="mt-4 bg-surface border border-border rounded-lg p-4 font-mono text-xs">
+                    <div className="mt-5 bg-surface border border-border rounded-lg p-4 font-mono text-xs shadow-[0_0_0_1px_rgba(255,255,255,0.02)]">
                         <div className="text-text-faint mb-2.5 text-[11px] tracking-[0.05em]">
                             → RESPONSE
                         </div>

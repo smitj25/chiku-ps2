@@ -3,8 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { CreditCard, ArrowUpRight } from "lucide-react";
-
-const BACKEND_URL = "http://localhost:8000";
+import { backendUrl, publicRuntime } from "@/lib/public-runtime";
 
 interface UsageData {
     total_calls_this_month: number;
@@ -25,8 +24,8 @@ export default function BillingPage() {
     const [usage, setUsage] = useState<UsageData | null>(null);
 
     useEffect(() => {
-        fetch(`${BACKEND_URL}/v1/usage`, {
-            headers: { "x-api-key": "dev-test-key-123" },
+        fetch(backendUrl("/v1/usage"), {
+            headers: { "x-api-key": publicRuntime.demoApiKey },
         })
             .then(res => res.json())
             .then(setUsage)
@@ -41,13 +40,13 @@ export default function BillingPage() {
     const healthCalls = usage?.per_plugin?.["healthcare"] ?? 0;
 
     return (
-        <div>
-            <div className="mb-10">
-                <h1 className="font-display text-4xl font-bold text-text-primary mb-3">Billing</h1>
-                <p className="font-mono text-sm text-text-muted">Your plan, usage, and invoices</p>
+        <div className="space-y-10">
+            <div className="page-header">
+                <h1 className="ui-page-title text-4xl mb-3">Billing</h1>
+                <p className="ui-page-subtitle">Your plan, usage, and invoices</p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Current plan */}
                 <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="bg-[rgba(163,230,53,0.04)] border border-[rgba(163,230,53,0.2)] rounded-xl p-7 lg:col-span-1">
                     <div className="font-mono text-xs text-lime tracking-[0.12em] font-medium mb-4">CURRENT PLAN</div>

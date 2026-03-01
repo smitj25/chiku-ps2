@@ -4,8 +4,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { Zap, Key, Settings, ArrowRight } from "lucide-react";
-
-const BACKEND_URL = "http://localhost:8000";
+import { backendUrl, publicRuntime } from "@/lib/public-runtime";
 
 interface UsageData {
     total_calls_this_month: number;
@@ -32,8 +31,8 @@ export default function DashboardPage() {
     const [usage, setUsage] = useState<UsageData | null>(null);
 
     useEffect(() => {
-        fetch(`${BACKEND_URL}/v1/usage`, {
-            headers: { "x-api-key": "dev-test-key-123" },
+        fetch(backendUrl("/v1/usage"), {
+            headers: { "x-api-key": publicRuntime.demoApiKey },
         })
             .then(res => res.json())
             .then(setUsage)
@@ -46,18 +45,18 @@ export default function DashboardPage() {
     const pctUsed = limit > 0 ? Math.round((totalCalls / limit) * 100) : 0;
 
     return (
-        <div>
-            <div className="mb-10">
-                <h1 className="font-display text-4xl font-bold text-text-primary mb-3">
+        <div className="space-y-10">
+            <div className="page-header">
+                <h1 className="ui-page-title text-4xl mb-3">
                     Dashboard
                 </h1>
-                <p className="font-mono text-sm text-text-muted">
-                    Overview of your SME-Plug workspace
+                <p className="ui-page-subtitle">
+                    Overview of your Tether workspace
                 </p>
             </div>
 
             {/* Stats cards */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-5 mb-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
                 {[
                     { label: "Active Plugins", value: "2", sub: "of 2 available", accent: "#a3e635" },
                     { label: "API Calls (this month)", value: totalCalls.toLocaleString(), sub: `of ${limit.toLocaleString()} limit`, accent: "#60a5fa" },
@@ -88,7 +87,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Quick actions */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                 {[
                     { icon: Zap, label: "Buy new plug", desc: "Browse marketplace", href: "/marketplace", color: "#a3e635" },
                     { icon: Key, label: "Generate API key", desc: "For your plugins", href: "/api-keys", color: "#60a5fa" },
@@ -196,7 +195,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Usage meter */}
-            <div className="mt-8 bg-surface border border-border rounded-xl p-7">
+            <div className="bg-surface border border-border rounded-xl p-7">
                 <div className="flex justify-between items-center mb-5">
                     <div className="font-mono text-xs text-text-faint tracking-[0.12em] font-medium">
                         API USAGE THIS MONTH

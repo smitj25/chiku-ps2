@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { PLUGS } from "@/lib/data";
 
 type Plug = (typeof PLUGS)[number];
@@ -17,7 +18,7 @@ function PlugCard({ plug, index }: { plug: Plug; index: number }) {
             transition={{ delay: index * 0.1 }}
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
-            className="rounded-lg p-7 cursor-default transition-all duration-300"
+            className="rounded-lg p-7 cursor-default transition-all duration-300 h-full flex flex-col"
             style={{
                 background: hovered ? plug.bg : "rgba(255,255,255,0.02)",
                 border: `1px solid ${hovered ? plug.border : "rgba(255,255,255,0.06)"}`,
@@ -60,7 +61,7 @@ function PlugCard({ plug, index }: { plug: Plug; index: number }) {
             </div>
 
             {/* Tags */}
-            <div className="flex flex-wrap gap-1.5 mb-5">
+            <div className="flex flex-wrap gap-1.5 mb-5 min-h-[42px]">
                 {plug.tags.map((tag) => (
                     <span
                         key={tag}
@@ -73,7 +74,7 @@ function PlugCard({ plug, index }: { plug: Plug; index: number }) {
 
             {/* Example query */}
             <div
-                className="rounded-md p-3 font-mono text-xs text-text-muted mb-5 italic leading-[1.5]"
+                className="rounded-md p-3 font-mono text-xs text-text-muted mb-5 italic leading-[1.5] min-h-[96px]"
                 style={{
                     background: "rgba(0,0,0,0.3)",
                     borderLeft: `2px solid ${plug.color}`,
@@ -83,7 +84,7 @@ function PlugCard({ plug, index }: { plug: Plug; index: number }) {
             </div>
 
             {/* Footer */}
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center mt-auto pt-4 border-t border-border">
                 <div>
                     <span className="font-mono text-[22px] font-bold text-text-primary">
                         ${plug.price}
@@ -109,7 +110,7 @@ export default function PlugShowcase() {
     return (
         <section
             id="marketplace"
-            className="py-20 md:py-24 px-6 md:px-20 bg-surface border-t border-[rgba(255,255,255,0.04)]"
+            className="py-24 px-6 md:px-20 bg-canvas-subtle border-y border-border"
         >
             <div className="max-w-[1200px] mx-auto">
                 {/* Header */}
@@ -122,12 +123,12 @@ export default function PlugShowcase() {
                             Choose your expert
                         </h2>
                     </div>
-                    <a
+                    <Link
                         href="/marketplace"
                         className="font-mono text-xs text-lime tracking-[0.05em] no-underline border-b border-[rgba(163,230,53,0.3)] pb-0.5 hover:border-lime transition-colors"
                     >
                         VIEW ALL PLUGS →
-                    </a>
+                    </Link>
                 </div>
 
                 {/* Grid */}
